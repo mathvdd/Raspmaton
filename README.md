@@ -83,3 +83,34 @@ Reboot for config changes to take effect
 ## Photomaton script
 
 ## Adding a fan
+
+The fan is controlled by a python script reading the temperature sensor of the RPi and a 2N3904 NPN transistor.
+
+Layout:
+
+- RPi pin 4 (GND) to transistor emitter
+- RPi pin 6 (GPIO 14) to transistor base
+- Fan negative to transistor collector
+- Fan positive to RPi pin 2 (5V)
+
+The python script (fancontrol.py) is originally from here: https://howchoo.com/g/ote2mjkzzta/control-raspberry-pi-fan-temperature-python
+
+Add the following line to */etc/rc.local* just before *exit 0* for booting fancontrol.py at launch:
+
+> python /home/USERNAME/fancontrol.py &
+
+`sudo reboot`
+
+### some more commands
+
+File transfert over ssh with scp:
+
+`scp /PATH/TO/FILE/fancontrol.py USERNAME@IP_ADRESS:fancontrol.py`
+
+Reading the temperature of the RPi from bash:
+
+`/usr/bin/vcgencmd measure_temp`
+
+See if the process is active after startup:
+
+`ps aux | grep fan`
