@@ -109,7 +109,20 @@ Layout:
 
 To test it is working:
 
-`python led_test.py`
+`python ledtest.py`
+
+## Button setup
+
+Added a button as an input for triggering the camera.
+
+Layout:
+
+- First pin of the button to 10k ohm resistor to RPI pin 10 (GPIO 15).
+- Second pin of the button to RPi pin 1 (3.3V)
+
+To test it is working:
+
+`python buttontest.py`
 
 ## External drive setup
 
