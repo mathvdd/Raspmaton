@@ -2,6 +2,8 @@
 
 `git clone https://github.com/mathvdd/Raspmaton.git to download all the scripts from this repository in ~/Raspmaton`
 
+`git pull` while in the directory to update it from github
+
 ## Install an OS on the raspberry
 https://www.raspberrypi.com/software/
 Here I use RASPBERRY PI OS LITE (30-BIT) Debian Bullseye from the Raspberry Pi Imager v1.7.2.
@@ -116,12 +118,14 @@ To test it is working:
 
 ## Button setup
 
-Added a button as an input for triggering the camera.
+Added a button in a pull down circuit as an input for triggering the camera. The capacitor is added because false push are triggered when the wire moves
 
 Layout:
 
-- First pin of the button to 10k ohm resistor to RPI pin 10 (GPIO 15).
+- First pin of the button to 1k ohm resistor to RPI pin 10 (GPIO 15)
 - Second pin of the button to RPi pin 1 (3.3V)
+- RPI pin 10 (GPIO 15) to a 10k ohm resistor to RPi pin 20 (GND)
+- a 10 000 nanofarad capacitor between RPi pin 20 (GND) and the first pin of the button (probably should have been between GND and GPIO 15?)
 
 To test it is working:
 
@@ -167,7 +171,7 @@ The python script (fancontrol.py) is originally from here: https://howchoo.com/g
 
 Add the following line to */etc/rc.local* just before *exit 0* for booting fancontrol.py at launch:
 
-> python /home/USERNAME/fancontrol.py &
+> python /home/USERNAME/Raspmaton/fancontrol.py &
 
 `sudo reboot`
 
