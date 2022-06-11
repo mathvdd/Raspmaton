@@ -1,4 +1,5 @@
 # Raspmaton
+
 ## Install an OS on the raspberry
 https://www.raspberrypi.com/software/
 Here I use RASPBERRY PI OS LITE (30-BIT) Debian Bullseye from the Raspberry Pi Imager v1.7.2.
@@ -125,6 +126,27 @@ To test it is working:
 `python buttontest.py`
 
 ## External drive setup
+
+The pictures will be stored on an external USB drive. It will be automounted in folder in ~/
+
+Crate a folder where to mount the drive:
+
+`mkdir USBdrive`
+
+Once inserted find the drive location with `lsblk`
+
+to get the UUID with `blkid`
+
+Modify fstab with the automount rules:
+
+`sudo cp /etc/fstab /etc/fstab.back`
+`sudo nano /etc/fstab`B62E-E773
+
+and add the following line (for a fat32 filesystem):
+
+> UUID=UUID_OF_USB_DRIVE /home/USERNAME/USBdrive vfat defaults,auto,users,rw,nofail,umask=000 0 0
+
+The drive will be mounted at each boot (reboot with 'reboot' or unplug), or with `mount -a`.
 
 ## Photomaton script
 
