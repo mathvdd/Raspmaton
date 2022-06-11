@@ -80,13 +80,36 @@ Reboot for config changes to take effect
 
 Physically connect the Camera (Official RPi camera)
 
+Connect the camera in the OS:
+
+`sudo raspi-config` -> Interface Options -> Legacy camera -> Enable (-> reboot?)
+
 Install the picamera python module:
 
 `sudo apt install python3-pip`
 
 `pip3 install picamera`
 
+Take a first picture to test the camera:
+
+`python camera_test.py`
+
 ## Light setup
+
+I got a LED USB lamp made up of circular tube filled with two analog LED strips (white and warm white) and a controller (with 4 buttons for ON/OFF, intensity and color warmth) in the middle of the USB cable. I desoldered the controller from the cable to be left with the 3 wires of led strip (V+; V- white; V- warm white), in order to control the LEDs from a RPi PWM pin with a transistor. With all LEDs at max intesity (5V), the LED strip takes individually about 2A. I can get about 1A from the RPi 5V pins (whatever the state of the fan) with my power supply which is sufficient to light up the LEDs (albeit not to their max intensity). The USB ports current is not enough to light my strip however, although I read somewhere they could supply up to 1.2A.
+
+In the end, I resoldered the LED 5V and GND to the USB connector (after removing the controller) as well as pin female connectors, to be able to choose between powering the LED strip both from the RPi and an external power supply. I used a TIP142T transistor I had on hand (maybe not the best choice, I know little about transistors).
+
+Layout:
+
+- RPi pin 12 (GPIO 18, PWM0) to ~670 ohm resistor to transistor base
+- Transistor emitter to RPi pin 14 (GND) (AND to the external power supply GND if and external supply is used)
+- Transistor collector to negative LED strip
+- Positive LED strip to RPi pin 2 (5V) or external power supply
+
+To test it is working:
+
+`python led_test.py`
 
 ## External drive setup
 
