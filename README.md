@@ -76,7 +76,17 @@ Add the following line to */etc/rc.local* just before *exit 0* for booting NoDog
 
 Reboot for config changes to take effect
 
-## Camera and light setup
+## Camera setup
+
+Physically connect the Camera (Official RPi camera)
+
+Install the picamera python module:
+
+`sudo apt install python3-pip`
+
+`pip3 install picamera`
+
+## Light setup
 
 ## External drive setup
 
