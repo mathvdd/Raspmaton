@@ -1,5 +1,7 @@
 # Raspmaton
 
+`git clone https://github.com/mathvdd/Raspmaton.git to download all the scripts from this repository in ~/Raspmaton`
+
 ## Install an OS on the raspberry
 https://www.raspberrypi.com/software/
 Here I use RASPBERRY PI OS LITE (30-BIT) Debian Bullseye from the Raspberry Pi Imager v1.7.2.
