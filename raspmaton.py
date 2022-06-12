@@ -26,8 +26,6 @@ GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin pin_button
 
 camera = PiCamera()
 
-export_path = os.path.join(os.path.expanduser('~'), 'test_camera.jpg')
-
 ## initiating file system
 
 # generates the www dir if not exists and write the config file if not exists
@@ -66,6 +64,7 @@ for filename in os.listdir(path_pictures):
 t0 = time.time()
 while True:
     if GPIO.input(pin_button) == GPIO.HIGH: #if the button is pushed
+        # takes the picture with lighting effects
         camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
         pi_pwm.start(0)	# start PWM
         for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
@@ -79,7 +78,8 @@ while True:
             for i in range(1,101,1): # gradually light up
                 pi_pwm.ChangeDutyCycle(i)
         time.sleep(1)
-        camera.capture(export_path)
-        time.sleep(0.5)
+        naming_count += 1
+        camera.capture(os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')) #take the picture
+        time.sleep(0.2)
         pi_pwm.stop()
         
