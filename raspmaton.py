@@ -65,6 +65,7 @@ t0 = time.time()
 while True:
     if GPIO.input(pin_button) == GPIO.HIGH: #if the button is pushed
         camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
+        pi_pwm.start(0)	# start PWM
         for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
             for i in range(1,101,1): # gradually light up
                 pi_pwm.ChangeDutyCycle(i)
