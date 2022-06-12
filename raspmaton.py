@@ -123,7 +123,7 @@ while True:
                 try:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
-                        <img class="center-fit" src={}%'>
+                        <img class="center-fit" src={}'>
                     </div>'''.format(path_file)
                 except:
                     pass
