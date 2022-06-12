@@ -81,7 +81,7 @@ while True:
         time.sleep(1)
         naming_count += 1
         naming_count_str = str(naming_count)
-        path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count_str:04d}' + '.jpg')
+        path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
         camera.capture(path_picture) #take the picture and save it on the external drive
         time.sleep(0.2)
         pi_pwm.stop()
