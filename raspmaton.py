@@ -54,7 +54,7 @@ naming_count = 0
 for filename in os.listdir(path_pictures):
     if filename.endswith('.jpg'): #just some checks
         try:
-            file_count = filename[-8:-4]
+            file_count = int(filename[-8:-4])
             if int(file_count) > naming_count:
                 naming_count = file_count
         except:
