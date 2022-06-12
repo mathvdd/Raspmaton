@@ -127,3 +127,6 @@ while True:
                     </div>'''.format(path_file)
                 except:
                     pass
+        
+        with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
+            f.write(head+content+foot)
