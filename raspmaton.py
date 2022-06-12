@@ -123,8 +123,8 @@ while True:
                 try:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
-                        <img class="center-fit" src={}'>
-                    </div>'''.format(path_file)
+                        <img class="center-fit" src='{}'>
+                    </div>'''.format('USBdrive' + path_file.split('USBdrive')[1])
                 except:
                     pass
         
