@@ -63,6 +63,7 @@ for filename in os.listdir(path_pictures):
 ## main loop
 t0 = time.time()
 while True:
+    
     if GPIO.input(pin_button) == GPIO.HIGH: #if the button is pushed
         # takes the picture with lighting effects
         camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
@@ -79,7 +80,49 @@ while True:
                 pi_pwm.ChangeDutyCycle(i)
         time.sleep(1)
         naming_count += 1
-        camera.capture(os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')) #take the picture
+        path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
+        camera.capture(path_picture) #take the picture and save it on the external drive
         time.sleep(0.2)
         pi_pwm.stop()
         
+        # generates the website
+        head = '''
+        <!DOCTYPE html>
+            <html>
+              <head>
+                <title>
+                  Raspmaton gallery
+                </title>
+                <style>
+                  * {
+                      margin: 0;
+                      padding: 0;
+                      margin-bottom: 1vh;
+                  }
+                  .imgbox {
+                      display: grid;
+                      height: 100%;
+                  }
+                  .center-fit {
+                      max-width: 100%;
+                      margin: auto;
+                  }
+                </style>
+              </head>
+              <body>
+        '''
+        foot = '''
+                    </body>
+            </html>
+        '''
+        content =''
+        for filename in sorted(os.listdir(path_pictures), reverse=True):
+            if filename.endswith('.jpg'): #just some checks
+                path_file = os.path.join(path_pictures, filename)
+                try:
+                    file_count = int(filename[-8:-4])
+                    content += '''<div class="imgbox">
+                        <img class="center-fit" src={}%'>
+                    </div>'''.format(path_file)
+                except:
+                    pass

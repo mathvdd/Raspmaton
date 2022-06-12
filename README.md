@@ -72,7 +72,7 @@ Add parameters at the end of */etc/nodogsplash/nodogsplash.conf*. The two last l
 
 > WebRoot /home/USERNAME/www
 
-> SplashPage photomaton.html
+> SplashPage raspmaton.html
 
 
 Add the following line to */etc/rc.local* just before *exit 0* for booting NoDogSplash at launch:
