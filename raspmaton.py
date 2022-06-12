@@ -26,6 +26,8 @@ GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin pin_button
 
 camera = PiCamera()
 
+export_path = os.path.join(os.path.expanduser('~'), 'test_camera.jpg')
+
 ## initiating file system
 
 # generates the www dir if not exists and write the config file if not exists
@@ -73,3 +75,11 @@ while True:
             for i in range(99,-1,-1):
                 pi_pwm.ChangeDutyCycle(i) # fade-out
                 time.sleep(1/feed_out_frequency)
+        for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
+            for i in range(1,101,1): # gradually light up
+                pi_pwm.ChangeDutyCycle(i)
+        time.sleep(1)
+        camera.capture(export_path)
+        time.sleep(0.5)
+        pi_pwm.stop()
+        
