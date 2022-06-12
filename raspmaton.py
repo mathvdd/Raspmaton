@@ -11,6 +11,8 @@ from picamera import PiCamera
 
 ## some parameters
 path_www = os.path.join(os.path.expanduser('~'), 'www') #path to the www directory
+drive_name = 'USBdrive'
+path_drive = os.path.join(os.path.expanduser('~'), drive_name)
 pin_button = 10 # pin to receive the button input
 pin_led = 12 # pin to controle the LEDs
 
@@ -45,7 +47,7 @@ with open(config_path, 'r') as f:
         param[line.split(':')[0]] = line.split(':')[1]
 
 #creates the picture directory for the event
-path_pictures = os.path.join(os.path.expanduser('~'), 'USBdrive', param['event_name'])
+path_pictures = os.path.join(path_drive, param['event_name'])
 if not os.path.isdir(path_pictures):
     os.mkdir(path_pictures) #creating the www folder
 
@@ -124,7 +126,7 @@ while True:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
                         <img class="center-fit" src='{}'>
-                    </div>'''.format('USBdrive' + path_file.split('USBdrive')[1])
+                    </div>'''.format(drive_name + path_file.split(path_drive)[1])
                 except:
                     pass
         
