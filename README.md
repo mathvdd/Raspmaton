@@ -1,8 +1,18 @@
 # Raspmaton
 
-`git clone https://github.com/mathvdd/Raspmaton.git to download all the scripts from this repository in ~/Raspmaton`
+This concisely describe my build of a photo booth with a Raspberry Pi 4. It is there for me as notes so maybe not always didactic and well written but could help if you are trying to do the same thing. The features of the photo booth are:
 
-`git pull` while in the directory to update it from github
+- No screen (The booth has a mirror and not a screen for people to pose)
+- the shot is indicated by a led strip blinking
+- pictures are available from a wifi hotspot (RaspAP) of the RPi
+- the wifi hotspot has an captive portal (NoDogSplash) redirecting to the page with the pictures
+- a fan is added for heat removal
+- the website is rather simple at the moment, but still has a lazyload feature
+- the files are stored in an external USB drive
+
+I plan to add a config.html page where it will be possible to define a project name that will define the folder name where the images are stored, and what images are displayed on the website. 
+
+Do not hesitate to reach out if you have trouble following this set-up
 
 ## Install an OS on the raspberry
 https://www.raspberrypi.com/software/
@@ -23,63 +33,13 @@ update the repository
 
 `sudo reboot` (not sure that one is useful but doesn't cost anything)
 
-## Installing RaspAP for wifi hotspot
+### Downloading the scripts
 
-https://raspap.com/
+`git clone https://github.com/mathvdd/Raspmaton.git` from the home directory to download all the scripts from this repository in ~/Raspmaton
 
-Somehow need to set the country in the RPi wifi settings (setting a SSID is not necessary, can just cancel this step)
+`git pull` while in the directory to update it from github
 
-`sudo raspi-config` -> System options -> Wireless LAN
-
-Install RaspAP with default configuration:
-
-`curl -sL https://install.raspap.com | bash`
-
-After reboot of the RPi can connect to the 'raspi-webgui' network.
-Browse 10.3.141.1 for settings (login: admin; pwd: secret)
-
-- Hotspot -> Basic -> SSID: name of the wifi network
-- Hotspot -> Security -> Security type: None
-- **Is the QR code there to connect to the wifi?**
-- Authentication: change the admin password
-
-## Installing the captive portal (NoDogSplash)
-
-https://nodogsplashdocs.readthedocs.io/en/stable/
-
-`sudo apt install git libmicrohttpd-dev`
-
-`git clone https://github.com/nodogsplash/nodogsplash.git`
-
-`cd nodogsplash`
-
-`make`
-
-`sudo make install`
-
-### Parametring NoDogSplash
-(https://www.maketecheasier.com/turn-raspberry-pi-captive-portal-wi%E2%80%90fi-access-point/)
-
-Add parameters at the end of */etc/nodogsplash/nodogsplash.conf*. The two last lines link to the future website.
-
-> GatewayInterface wlan0
-
-> GatewayAddress 10.3.141.1
-
-> MaxClients 250
-
-> AuthIdleTimeout 480
-
-> WebRoot /home/USERNAME/www
-
-> SplashPage raspmaton.html
-
-
-Add the following line to */etc/rc.local* just before *exit 0* for launching NoDogSplash at boot:
-
-> nodogsplash
-
-Reboot for config changes to take effect
+# Hardware
 
 ## Camera setup
 
@@ -156,18 +116,6 @@ and add the following line (for a fat32 filesystem):
 
 The drive will be mounted at each boot (reboot with 'reboot' or unplug), or with `mount -a`.
 
-## Photomaton and generate website script
-
-The main script to control the photobooth and generate the website is **raspmaton.py**
-
-The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
-
-`curl -o ~/www/lazysizes.min.js http://afarkas.github.io/lazysizes/lazysizes.min.js`
-
-Add the following line to */etc/rc.local* just before *exit 0* for launching raspmaton.py at boot:
-
-> python /home/USERNAME/Raspmaton/raspmaton.py &
-
 ## Adding a fan
 
 The fan is controlled by a python script reading the temperature sensor of the RPi and a 2N3904 NPN transistor.
@@ -200,3 +148,75 @@ Reading the temperature of the RPi from bash:
 See if the process is active after startup:
 
 `ps aux | grep fan`
+
+# Software
+
+## Installing RaspAP for wifi hotspot
+
+https://raspap.com/
+
+Somehow need to set the country in the RPi wifi settings (setting a SSID is not necessary, can just cancel this step)
+
+`sudo raspi-config` -> System options -> Wireless LAN
+
+Install RaspAP with default configuration:
+
+`curl -sL https://install.raspap.com | bash`
+
+After reboot of the RPi can connect to the 'raspi-webgui' network.
+Browse 10.3.141.1 for settings (login: admin; pwd: secret)
+
+- Hotspot -> Basic -> SSID: name of the wifi network
+- Hotspot -> Security -> Security type: None
+- **Is the QR code there to connect to the wifi?**
+- Authentication: change the admin password
+
+## Installing the captive portal (NoDogSplash)
+
+https://nodogsplashdocs.readthedocs.io/en/stable/
+
+`sudo apt install git libmicrohttpd-dev`
+
+`git clone https://github.com/nodogsplash/nodogsplash.git`
+
+`cd nodogsplash`
+
+`make`
+
+`sudo make install`
+
+### Parametring NoDogSplash
+(https://www.maketecheasier.com/turn-raspberry-pi-captive-portal-wi%E2%80%90fi-access-point/)
+
+Add parameters at the end of */etc/nodogsplash/nodogsplash.conf*. The two last lines link to the future website.
+
+> GatewayInterface wlan0
+
+> GatewayAddress 10.3.141.1
+
+> MaxClients 250
+
+> AuthIdleTimeout 480
+
+> WebRoot /home/USERNAME/www
+
+> SplashPage raspmaton.html
+
+
+Add the following line to */etc/rc.local* just before *exit 0* for launching NoDogSplash at boot:
+
+> nodogsplash
+
+Reboot for config changes to take effect
+
+## Raspmaton and generate website script
+
+The main script to control the photobooth and generate the website is **raspmaton.py**
+
+The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
+
+`curl -o ~/www/lazysizes.min.js http://afarkas.github.io/lazysizes/lazysizes.min.js`
+
+Add the following line to */etc/rc.local* just before *exit 0* for launching raspmaton.py at boot:
+
+> sudo -u USERNAME python /home/USERNAME/Raspmaton/raspmaton.py &
