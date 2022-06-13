@@ -75,7 +75,7 @@ Add parameters at the end of */etc/nodogsplash/nodogsplash.conf*. The two last l
 > SplashPage raspmaton.html
 
 
-Add the following line to */etc/rc.local* just before *exit 0* for booting NoDogSplash at launch:
+Add the following line to */etc/rc.local* just before *exit 0* for launching NoDogSplash at boot:
 
 > nodogsplash
 
@@ -156,7 +156,17 @@ and add the following line (for a fat32 filesystem):
 
 The drive will be mounted at each boot (reboot with 'reboot' or unplug), or with `mount -a`.
 
-## Photomaton script
+## Photomaton and generate website script
+
+The main script to control the photobooth and generate the website is **raspmaton.py**
+
+The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
+
+`curl -o ~/www/lazysizes.min.js http://afarkas.github.io/lazysizes/lazysizes.min.js`
+
+Add the following line to */etc/rc.local* just before *exit 0* for launching raspmaton.py at boot:
+
+> python /home/USERNAME/Raspmaton/raspmaton.py &
 
 ## Adding a fan
 
@@ -171,7 +181,7 @@ Layout:
 
 The python script (fancontrol.py) is originally from here: https://howchoo.com/g/ote2mjkzzta/control-raspberry-pi-fan-temperature-python
 
-Add the following line to */etc/rc.local* just before *exit 0* for booting fancontrol.py at launch:
+Add the following line to */etc/rc.local* just before *exit 0* for launching fancontrol.py at boot:
 
 > python /home/USERNAME/Raspmaton/fancontrol.py &
 

@@ -65,6 +65,29 @@ for filename in os.listdir(path_pictures):
 ## main loop
 t0 = time.time()
 while True:
+        
+    # takes the picture event
+    GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
+    camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
+    pi_pwm.start(0)	# start PWM
+    for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
+        for i in range(1,101,1): # gradually light up
+            pi_pwm.ChangeDutyCycle(i)
+            time.sleep(1/feed_out_frequency)
+        for i in range(99,-1,-1):
+            pi_pwm.ChangeDutyCycle(i) # fade-out
+            time.sleep(1/feed_out_frequency)
+    for j in range(2): #light up one last time before the picture
+        for i in range(1,101,1): # gradually light up
+            pi_pwm.ChangeDutyCycle(i)
+    time.sleep(1)
+    naming_count += 1
+    naming_count_str = str(naming_count)
+    path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
+    camera.capture(path_picture) #take the picture and save it on the external drive
+    time.sleep(0.2)
+    pi_pwm.stop()
+    
     # generates the website
     head = '''
     <!DOCTYPE html>
@@ -121,26 +144,3 @@ while True:
     
     with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
         f.write(head+content+foot)
-    
-    # takes the picture event
-    GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
-    # takes the picture with lighting effects
-    camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
-    pi_pwm.start(0)	# start PWM
-    for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
-        for i in range(1,101,1): # gradually light up
-            pi_pwm.ChangeDutyCycle(i)
-            time.sleep(1/feed_out_frequency)
-        for i in range(99,-1,-1):
-            pi_pwm.ChangeDutyCycle(i) # fade-out
-            time.sleep(1/feed_out_frequency)
-    for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
-        for i in range(1,101,1): # gradually light up
-            pi_pwm.ChangeDutyCycle(i)
-    time.sleep(1)
-    naming_count += 1
-    naming_count_str = str(naming_count)
-    path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
-    camera.capture(path_picture) #take the picture and save it on the external drive
-    time.sleep(0.2)
-    pi_pwm.stop()
