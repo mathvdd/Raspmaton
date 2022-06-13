@@ -119,16 +119,27 @@ while True:
         </html>
     '''
     content =''
+    not_lazy = 0 #this is ised for not lazy loadeing the first images in the viewport
     for filename in sorted(os.listdir(path_pictures), reverse=True):
         if filename.endswith('.jpg'): #just some checks
             path_file = os.path.join(path_pictures, filename)
-            try:
-                file_count = int(filename[-8:-4])
-                content += '''<div class="imgbox">
-                    <img class="center-fit" loading="lazy" src='{}'>
-                </div>'''.format(drive_name + path_file.split(path_drive)[1])
-            except:
-                pass
+            if not_lazy <3: #load the first 3 images
+                try:    
+                    file_count = int(filename[-8:-4])
+                    content += '''<div class="imgbox">
+                        <img class="center-fit" src='{}'>
+                    </div>'''.format(drive_name + path_file.split(path_drive)[1])
+                    not_lazy +=1
+                except:
+                    pass
+            else:
+                try: # lazy load the other images
+                    file_count = int(filename[-8:-4])
+                    content += '''<div class="imgbox">
+                        <img class="center-fit" loading="lazy" src='{}'>
+                    </div>'''.format(drive_name + path_file.split(path_drive)[1])
+                except:
+                    pass 
     
     with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
         f.write(head+content+foot)
