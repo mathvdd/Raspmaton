@@ -111,6 +111,7 @@ while True:
                   margin: auto;
               }
             </style>
+            <script src="lazysizes.min.js" async=""></script>
           </head>
           <body>
     '''
@@ -136,7 +137,7 @@ while True:
                 try: # lazy load the other images
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
-                        <img class="center-fit" loading="lazy" src='{}'>
+                        <img class="center-fit lazyload" loading="lazy" src='{}'>
                     </div>'''.format(drive_name + path_file.split(path_drive)[1])
                 except:
                     pass 
