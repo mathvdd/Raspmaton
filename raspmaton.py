@@ -128,7 +128,7 @@ while True:
                 try:    
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
-                        <img class="center-fit" src='{}'>
+                        <img class="center-fit" data-src='{}'>
                     </div>'''.format(drive_name + path_file.split(path_drive)[1])
                     not_lazy +=1
                 except:
@@ -137,7 +137,7 @@ while True:
                 try: # lazy load the other images
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
-                        <img class="center-fit" loading="lazy" src='{}'>
+                        <img class="center-fit lazyload" data-src='{}'>
                     </div>'''.format(drive_name + path_file.split(path_drive)[1])
                 except:
                     pass 
