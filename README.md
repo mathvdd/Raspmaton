@@ -118,14 +118,16 @@ To test it is working:
 
 ## Button setup
 
-Added a button in a pull down circuit as an input for triggering the camera. The capacitor is added because false push are triggered when the wire moves
+Added a button in a pull up circuit as an input for triggering the camera. The capacitor is added because false push are triggered when the wire moves. pull_up_down=GPIO.PUD_UP should be enough insted of a pull up resistor to 3.3V (https://github.com/raspberrypilearning/physical-computing-guide/blob/master/pull_up_down.md) but it did not show good results for me
 
 Layout:
 
 - First pin of the button to 1k ohm resistor to RPI pin 10 (GPIO 15)
-- Second pin of the button to RPi pin 1 (3.3V)
-- RPI pin 10 (GPIO 15) to a 10k ohm resistor to RPi pin 20 (GND)
-- a 10 000 nanofarad capacitor between RPi pin 20 (GND) and the first pin of the button (probably should have been between GND and GPIO 15?)
+- Second pin of the button to RPi pin 20 (GND)
+- RPI pin 10 (GPIO 15) to a 10k ohm resistor to RPi pin 1 (3.3V)
+- a 10 000 nanofarad capacitor between RPi pin 1 (3.3V) and the first pin of the button
+
+pull up configuration gave better results than pull down
 
 To test it is working:
 

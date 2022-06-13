@@ -16,7 +16,7 @@ path_drive = os.path.join(os.path.expanduser('~'), drive_name)
 pin_button = 10 # pin to receive the button input
 pin_led = 12 # pin to controle the LEDs
 
-pwm_frequency = 1000 # The PWM frequecy is high to have a nice fading with the loop bellow
+pwm_frequency = 2000 # The PWM frequecy is high to have a nice fading with the loop bellow
 feed_out_frequency = pwm_frequency/10
 
 GPIO.setwarnings(False)	# disable warnings
@@ -24,7 +24,7 @@ GPIO.setmode(GPIO.BOARD) # set the pin numbering system
 GPIO.setup(pin_led,GPIO.OUT) # set pin_led as an output
 pi_pwm = GPIO.PWM(pin_led,pwm_frequency) #create PWM instance.
 
-GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin pin_button as input starting in a low state
+GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin pin_button as input starting in a low state
 
 camera = PiCamera()
 
@@ -66,7 +66,7 @@ for filename in os.listdir(path_pictures):
 t0 = time.time()
 while True:
     
-    if GPIO.input(pin_button) == GPIO.HIGH: #if the button is pushed
+    if GPIO.input(pin_button) == GPIO.LOW: #if the button is pushed
         # takes the picture with lighting effects
         camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
         pi_pwm.start(0)	# start PWM

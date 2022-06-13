@@ -15,9 +15,11 @@ t0 = time.time()
 
 GPIO.setwarnings(False)	# disable warnings
 GPIO.setmode(GPIO.BOARD) # set the pin numbering system
-GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 as input starting in a low state
+GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin 10 as input with pull up 
+# GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 as input with pull down
 
 while True:
-    if GPIO.input(10) == GPIO.HIGH: #if the button is pushed
+    # if GPIO.input(button_pin) == GPIO.HIGH: #if the button is pushed
+    if GPIO.input(button_pin) == GPIO.LOW: #if the button is pushed
         print("Button pushed at t0 +", round(time.time() -t0,2), 'seconds')
         time.sleep(time_between_pushes)
