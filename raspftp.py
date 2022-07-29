@@ -27,4 +27,5 @@ def check_content(ftp_object):
 # filename = 'qr.svg'
 # ftp.storbinary('STOR '+filename, open(filename, 'rb'))
 ftp = connect()
+check_content(ftp)
 ftp.quit()
