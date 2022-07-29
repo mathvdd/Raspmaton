@@ -1,18 +1,23 @@
 # Raspmaton
 
-This concisely describe my build of a photo booth with a Raspberry Pi 4. It is there for me as notes so maybe not always didactic and well written but could help if you are trying to do the same thing. The features of the photo booth are:
+This concisely describe my build of a photo booth with a Raspberry Pi 4. It is there for me as notes so not always didactic and well written but could help if you are trying to do the same thing. The features of the photo booth are:
 
 - No screen (The booth has a mirror and not a screen for people to pose)
 - the shot is indicated by a led strip blinking
+- a fan is added for heat removal
+- the website is rather simple at the moment, but still has a lazyload feature (with lazysizes)
+- the files are stored in an external USB drive
+- a website with the pictures is updated through ftp (with ftplib)
+
+I plan to add a config.html page where it will be possible to define a project name that will define the folder name where the images are stored, and what images are displayed on the website
+
+The previous version was set up to work without internet and instead of the ftp uplaoad had the following features:
+
 - pictures are available from a wifi hotspot (RaspAP) of the RPi
 - the wifi hotspot has an captive portal (NoDogSplash) redirecting to the page with the pictures
-- a fan is added for heat removal
-- the website is rather simple at the moment, but still has a lazyload feature
-- the files are stored in an external USB drive
 
-I plan to add a config.html page where it will be possible to define a project name that will define the folder name where the images are stored, and what images are displayed on the website. 
-
-Do not hesitate to reach out if you have trouble following this set-up
+The instructions are still availables at the end of the readme file but the changes to raspmaton.py may not be backward compatible (look before 23/07/2022 in the repository for the previous version that was build with those features.
+One drawback I never solved: NoDogSplash does not work if the RPi is not connected to the internet, I saw discussion about this online and there may be solutions but never tried try to implement them
 
 ## Install an OS on the raspberry
 https://www.raspberrypi.com/software/
@@ -149,7 +154,26 @@ See if the process is active after startup:
 
 `ps aux | grep fan`
 
-# Software
+## Raspmaton and generate website script
+
+The main script to control the photobooth and generate the website is **raspmaton.py**
+
+The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
+
+`curl -o ~/www/lazysizes.min.js http://afarkas.github.io/lazysizes/lazysizes.min.js`
+
+Add the following line to */etc/rc.local* just before *exit 0* for launching raspmaton.py at boot:
+
+> sudo -u USERNAME python /home/USERNAME/Raspmaton/raspmaton.py &
+
+### ftp credentials
+
+The ftp credentials need to be stored the 'ftp_credentials' file in the following format:
+domain:FTP_DOMAIN
+username:FTP_USERNAME
+password:FTP_PASSWORD
+
+# Local version with wifi hotspot (may not be working with the most recent version, see the repository before 23/07/2022)
 
 ## Installing RaspAP for wifi hotspot
 
@@ -208,15 +232,3 @@ Add the following line to */etc/rc.local* just before *exit 0* for launching NoD
 > nodogsplash
 
 Reboot for config changes to take effect
-
-## Raspmaton and generate website script
-
-The main script to control the photobooth and generate the website is **raspmaton.py**
-
-The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
-
-`curl -o ~/www/lazysizes.min.js http://afarkas.github.io/lazysizes/lazysizes.min.js`
-
-Add the following line to */etc/rc.local* just before *exit 0* for launching raspmaton.py at boot:
-
-> sudo -u USERNAME python /home/USERNAME/Raspmaton/raspmaton.py &
