@@ -1,3 +1,4 @@
 domain:FTP_DOMAIN
 username:FTP_USERNAME
 password:FTP_PASSWORD
+ftp_www:REMOTE_DIR
