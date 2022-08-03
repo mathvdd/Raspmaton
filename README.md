@@ -19,6 +19,8 @@ The previous version was set up to work without internet and instead of the ftp 
 The instructions are still availables at the end of the readme file but the changes to raspmaton.py may not be backward compatible (look before 23/07/2022 in the repository for the previous version that was build with those features.
 One drawback I never solved: NoDogSplash does not work if the RPi is not connected to the internet, I saw discussion about this online and there may be solutions but never tried try to implement them
 
+# Software
+
 ## Install an OS on the raspberry
 https://www.raspberrypi.com/software/
 Here I use RASPBERRY PI OS LITE (30-BIT) Debian Bullseye from the Raspberry Pi Imager v1.7.2.
@@ -38,11 +40,31 @@ update the repository
 
 `sudo reboot` (not sure that one is useful but doesn't cost anything)
 
-### Downloading the scripts
+## Downloading the scripts
 
 `git clone https://github.com/mathvdd/Raspmaton.git` from the home directory to download all the scripts from this repository in ~/Raspmaton
 
 `git pull` while in the directory to update it from github
+
+## Raspmaton and generate website script
+
+The main script to control the photobooth and generate the website is **raspmaton.py**
+
+The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
+
+`curl -o ~/www/lazysizes.min.js http://afarkas.github.io/lazysizes/lazysizes.min.js`
+
+Add the following line to */etc/rc.local* just before *exit 0* for launching raspmaton.py at boot:
+
+> sudo -u USERNAME python /home/USERNAME/Raspmaton/raspmaton.py &
+
+## ftp credentials
+
+The ftp credentials need to be stored the 'parameters.txt' file in the following format:
+domain:FTP_DOMAIN
+username:FTP_USERNAME
+password:FTP_PASSWORD
+ftp_www:WEBPAGE_ROOT
 
 # Hardware
 
@@ -153,25 +175,6 @@ Reading the temperature of the RPi from bash:
 See if the process is active after startup:
 
 `ps aux | grep fan`
-
-## Raspmaton and generate website script
-
-The main script to control the photobooth and generate the website is **raspmaton.py**
-
-The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
-
-`curl -o ~/www/lazysizes.min.js http://afarkas.github.io/lazysizes/lazysizes.min.js`
-
-Add the following line to */etc/rc.local* just before *exit 0* for launching raspmaton.py at boot:
-
-> sudo -u USERNAME python /home/USERNAME/Raspmaton/raspmaton.py &
-
-### ftp credentials
-
-The ftp credentials need to be stored the 'ftp_credentials' file in the following format:
-domain:FTP_DOMAIN
-username:FTP_USERNAME
-password:FTP_PASSWORD
 
 # Local version with wifi hotspot (may not be working with the most recent version, see the repository before 23/07/2022)
 
