@@ -7,13 +7,13 @@ https://github.com/mathvdd/Raspmaton
 from ftplib import FTP
 import os
 
-#with open("parameters.txt") as f:
-#    param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
+with open("parameters.txt") as f:
+    param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
 
 def connect():
-    ftp = FTP('')
-    ftp.login(user='', passwd = '')
-    ftp.cwd('www/fiesta')
+    ftp = FTP(param.get('domain'))
+    ftp.login(user=param.get('username'), passwd = param.get('password'))
+    ftp.cwd(param.get('ftp_www'))
     return ftp
 
 def check_content(ftp_object, subdir):
