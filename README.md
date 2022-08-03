@@ -42,6 +42,10 @@ update the repository
 
 ## Downloading the scripts
 
+if git not installed:
+
+`sudo apt install git`
+
 `git clone https://github.com/mathvdd/Raspmaton.git` from the home directory to download all the scripts from this repository in ~/Raspmaton
 
 `git pull` while in the directory to update it from github
@@ -49,6 +53,10 @@ update the repository
 ## Raspmaton and generate website script
 
 The main script to control the photobooth and generate the website is **raspmaton.py**
+
+Make the www dir:
+
+`cd ~/ && mkdir www`
 
 The website uses a lazysizes (https://github.com/aFarkas/lazysizes) to lazyload the pictures. lazysizes.min.js should be put in the **~/www** directory. It can be done with:
 
@@ -104,7 +112,7 @@ Install the picamera python module:
 
 Take a first picture to test the camera:
 
-`python camera_test.py`
+`python Raspmaton/camera_test.py`
 
 ## Light setup
 
@@ -121,7 +129,7 @@ Layout:
 
 To test it is working:
 
-`python ledtest.py`
+`python Raspmaton/ledtest.py`
 
 ## Button setup
 
@@ -138,7 +146,7 @@ pull up configuration gave better results than pull down
 
 To test it is working:
 
-`python buttontest.py`
+`python Raspmaton/buttontest.py`
 
 ## External drive setup
 
@@ -155,7 +163,8 @@ to get the UUID with `blkid`
 Modify fstab with the automount rules:
 
 `sudo cp /etc/fstab /etc/fstab.back`
-`sudo nano /etc/fstab`B62E-E773
+
+`sudo nano /etc/fstab`
 
 and add the following line (for a fat32 filesystem):
 
