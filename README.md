@@ -30,7 +30,7 @@ In the advanced options:
 - Enable SSH (I will use SSH to configure the Pi, alternatively connect it to a screen and keyboard)
 - Set USERNAME and PASSWORD
 
-Boot the RPi. Connect to the LAN with an ethernet cable. Connect to ssh
+Boot the RPi. Connect to the LAN with an ethernet cable (or can also connect to the wifi through the advanced setup of the imager). Connect to ssh
 
 `ssh USERNAME@IP_ADRESS`
 
@@ -65,6 +65,26 @@ domain:FTP_DOMAIN
 username:FTP_USERNAME
 password:FTP_PASSWORD
 ftp_www:WEBPAGE_ROOT
+
+## (optional) connet to a wifi network
+
+To see available networks:
+
+`sudo iwlist wlan0 scan | grep ESSID`
+
+To see current IP address:
+
+`ifconfig`
+
+Somehow need to set the country in the RPi wifi settings if wifi was not set up before
+
+`sudo raspi-config` -> System options -> Wireless LAN
+
+continue with SSID the name of the wifi network to connect to and PASSWORD
+
+To see registered networks or manually add networks:
+
+`sudo nano /etc/wpa_supplicant/wpa_supplicant.conf`
 
 # Hardware
 
