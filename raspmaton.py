@@ -8,9 +8,6 @@ import os
 import RPi.GPIO as GPIO 
 import time
 from picamera import PiCamera
-import time
-#import raspftp
-import raspftp
 
 ## some parameters
 path_www = os.path.join(os.path.expanduser('~'), 'www') #path to the www directory
@@ -109,7 +106,7 @@ while True:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
                         <img class="center-fit" src='{}'>
-                    </div>'''.format('.'+ path_file.split(path_drive)[1])
+                    </div>'''.format(drive_name + path_file.split(path_drive)[1])
                     not_lazy +=1
                 except:
                     pass
@@ -118,21 +115,13 @@ while True:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
                         <img class="center-fit lazyload" data-src='{}'>
-                    </div>'''.format('.'+path_file.split(path_drive)[1])
+                    </div>'''.format(drive_name + path_file.split(path_drive)[1])
                 except:
                     pass 
     
     with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
         f.write(head+content+foot)
-    try:
-        #uplad the file through ftp
-        ftp = raspftp.connectftp()
-        raspftp.upload_contentftp(ftp, 'noname')
-        raspftp.update_indexftp(ftp, '/home/raspmaton/www')
-        raspftp.disconnectftp(ftp)
-    except:
-        print('no FTP connection')
-
+    
     # takes the picture event
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
@@ -152,5 +141,5 @@ while True:
     naming_count_str = str(naming_count)
     path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
     camera.capture(path_picture) #take the picture and save it on the external drive
-    time.sleep(1)
+    time.sleep(0.2)
     pi_pwm.stop()
