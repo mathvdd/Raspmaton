@@ -45,6 +45,22 @@ while i < 3:
     GPIO.output(pin_ledb,GPIO.LOW)
     i +=1
 
+## check if the USB drive is connected
+if os.path.isfile(os.path.join(path_drive, 'this_is_the_drive')):
+    i = 0
+    while i < 2:
+        sleep(0.2)
+        GPIO.output(pin_ledg,GPIO.HIGH)
+        sleep(0.2)
+        GPIO.output(pin_ledg,GPIO.LOW)
+        i +=1
+else:
+    while True:
+        sleep(0.2)
+        GPIO.output(pin_ledr,GPIO.HIGH)
+        sleep(0.2)
+        GPIO.output(pin_ledr,GPIO.LOW)
+
 ## initiating file system
 
 # generates the www dir if not exists and write the config file if not exists
@@ -175,7 +191,7 @@ while True:
     naming_count += 1
     naming_count_str = str(naming_count)
     path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
-    print('took picture', param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
+    #print('took picture', param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
     camera.capture(path_picture) #take the picture and save it on the external drive
     time.sleep(0.2)
     pi_pwm.stop()
