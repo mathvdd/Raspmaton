@@ -7,10 +7,13 @@ https://github.com/mathvdd/Raspmaton
 from ftplib import FTP
 import os
 
-with open("parameters.txt") as f:
-    param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
+#with open("parameters.txt") as f:
+#    param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
 
 def connect():
+    with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
+        param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
+
     ftp = FTP(param.get('domain'))
     ftp.login(user=param.get('username'), passwd = param.get('password'))
     ftp.cwd(param.get('ftp_www'))
@@ -27,10 +30,10 @@ def check_content(ftp_object, subdir):
 
 def upload_content(ftp, subdir):
    remote_list = ftp.nlst(subdir)
-   local_list = os.listdir(os.path.join('/home/raspmaton/www/USBdrive', subdir))
+   local_list = os.listdir(os.path.join(os.path.expanduser('~/USBdrive'), subdir))
    for im in local_list:
       if im not in remote_list:
-         ftp.storbinary('STOR '+os.path.join(subdir,im), open(os.path.join('/home/raspmaton/www/USBdrive', subdir, im), 'rb'))
+         ftp.storbinary('STOR '+os.path.join(subdir,im), open(os.path.join(os.path.expanduser('~/USBdrive'), subdir, im), 'rb'))
 
 def update_index(ftp, local_dir):
    ftp.storbinary('STOR '+'index.html', open(os.path.join(local_dir,'raspmaton.html'), 'rb'))
