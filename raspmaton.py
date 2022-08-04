@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 import time
 from picamera import PiCamera
 import raspftp
+from time import sleep
 
 ## some parameters
 path_www = os.path.join(os.path.expanduser('~'), 'www') #path to the www directory
@@ -16,6 +17,9 @@ drive_name = 'USBdrive'
 path_drive = os.path.join(os.path.expanduser('~'), drive_name)
 pin_button = 10 # pin to receive the button input
 pin_led = 12 # pin to controle the LEDs
+pin_ledb = 16
+pin_ledg = 18
+pin_ledr = 22
 
 pwm_frequency = 2000 # The PWM frequecy is high to have a nice fading with the loop bellow
 feed_out_frequency = pwm_frequency/10
@@ -23,11 +27,23 @@ feed_out_frequency = pwm_frequency/10
 GPIO.setwarnings(False) # disable warnings
 GPIO.setmode(GPIO.BOARD) # set the pin numbering system
 GPIO.setup(pin_led,GPIO.OUT) # set pin_led as an output
+GPIO.setup(pin_ledb,GPIO.OUT)
+GPIO.setup(pin_ledg,GPIO.OUT)
+GPIO.setup(pin_ledr,GPIO.OUT)
 pi_pwm = GPIO.PWM(pin_led,pwm_frequency) #create PWM instance.
 
 GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin pin_button as input starting in a low state
 
 camera = PiCamera()
+
+## blink blue for on
+i = 0
+while i < 3:
+    sleep(0.2)
+    GPIO.output(pin_ledb,GPIO.HIGH)
+    sleep(0.2)
+    GPIO.output(pin_ledb,GPIO.LOW)
+    i +=1
 
 ## initiating file system
 
@@ -65,6 +81,7 @@ for filename in os.listdir(path_pictures):
 
 ## main loop
 t0 = time.time()
+GPIO.output(pin_ledb,GPIO.HIGH)
 while True:
     # generates the website
     head = '''
@@ -130,9 +147,15 @@ while True:
         raspftp.upload_content(ftp, 'noname')
         raspftp.update_index(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
-        print('ftp upload')
+        #blink green led
+        GPIO.output(pin_ledg,GPIO.HIGH)
+        sleep(0.5)
+        GPIO.output(pin_ledg,GPIO.LOW)
     except:
-        print('ftp upload failed')
+        #blink red led
+        GPIO.output(pin_ledr,GPIO.HIGH)
+        sleep(0.5)
+        GPIO.output(pin_ledr,GPIO.LOW)
     
     # takes the picture event
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
