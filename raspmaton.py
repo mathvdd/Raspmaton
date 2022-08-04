@@ -8,6 +8,7 @@ import os
 import RPi.GPIO as GPIO 
 import time
 from picamera import PiCamera
+import raspftp
 
 ## some parameters
 path_www = os.path.join(os.path.expanduser('~'), 'www') #path to the www directory
@@ -19,7 +20,7 @@ pin_led = 12 # pin to controle the LEDs
 pwm_frequency = 2000 # The PWM frequecy is high to have a nice fading with the loop bellow
 feed_out_frequency = pwm_frequency/10
 
-GPIO.setwarnings(False)	# disable warnings
+GPIO.setwarnings(False) # disable warnings
 GPIO.setmode(GPIO.BOARD) # set the pin numbering system
 GPIO.setup(pin_led,GPIO.OUT) # set pin_led as an output
 pi_pwm = GPIO.PWM(pin_led,pwm_frequency) #create PWM instance.
@@ -106,7 +107,8 @@ while True:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
                         <img class="center-fit" src='{}'>
-                    </div>'''.format(drive_name + path_file.split(path_drive)[1])
+                    </div>'''.format('.' + path_file.split(path_drive)[1])
+                    #</div>''.format(drive_name + path_file.split(path_drive)[1])
                     not_lazy +=1
                 except:
                     pass
@@ -115,17 +117,27 @@ while True:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
                         <img class="center-fit lazyload" data-src='{}'>
-                    </div>'''.format(drive_name + path_file.split(path_drive)[1])
+                    </div>'''.format('.' + path_file.split(path_drive)[1])
+                    #</div>''.format(drive_name + path_file.split(path_drive)[1])
                 except:
                     pass 
     
     with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
         f.write(head+content+foot)
+
+    try:
+        ftp = raspftp.connect()
+        raspftp.upload_content(ftp, 'noname')
+        raspftp.update_index(ftp, os.path.expanduser('~/www'))
+        raspftp.disconnect(ftp)
+        print('ftp upload')
+    except:
+        print('ftp upload failed')
     
     # takes the picture event
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
-    pi_pwm.start(0)	# start PWM
+    pi_pwm.start(0)     # start PWM
     for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
         for i in range(1,101,1): # gradually light up
             pi_pwm.ChangeDutyCycle(i)
@@ -140,6 +152,7 @@ while True:
     naming_count += 1
     naming_count_str = str(naming_count)
     path_picture = os.path.join(path_pictures, param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
+    print('took picture', param['event_name'] + '_' + f'{naming_count:04d}' + '.jpg')
     camera.capture(path_picture) #take the picture and save it on the external drive
     time.sleep(0.2)
     pi_pwm.stop()
