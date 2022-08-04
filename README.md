@@ -172,6 +172,22 @@ and add the following line (for a fat32 filesystem):
 
 The drive will be mounted at each boot (reboot with 'reboot' or unplug), or with `mount -a`.
 
+a 'this_is_the_drive' file need to be on the USB drive so the script can check it is mounted at startup. With the drive mounted:
+
+`touch USBdrive/this_is_the_drive`
+
+## Indicator LEDs
+
+3 indicator leds are added:
+
+blue LED -> 1kOhm resistor -> pin 16
+green LED -> 1kOhm resistor -> pin 18
+red LED -> 1kOhm resistor -> pin 22
+
+At startup: the blue led blink when the script start and then stay on. The green led blink twice if the USB drive is mounted. The red blink indefinitely if the USB drive is not mounted (and the rest of the script is not executed)
+
+When the website is updated through ftp: green blink means successful, red blink means failure (but the picture will still be saved on the USB drive and uploaded at next successful update) 
+
 ## Adding a fan
 
 The fan is controlled by a python script reading the temperature sensor of the RPi and a 2N3904 NPN transistor.
