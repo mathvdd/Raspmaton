@@ -1,0 +1,13 @@
+AuthName "Raspmaton"
+AuthType Basic
+AuthUserFile ABSOLUTE_PATH_TO/.htpasswd
+Require valid-user
+
+<Files "*">
+Require valid-user
+</Files>
+
+<Files "*.conf">
+Allow from all 
+Satisfy any
+</Files>
