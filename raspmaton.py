@@ -101,29 +101,38 @@ if not os.path.isdir(path_www): #creating the www folder if not exists
 
 # save params as file so can be kept between boots    
 if gitparam != None: #replace the param file or create a new one if not exists, load the file in the last case
-    with open(gitparam, 'w') as f:
+    with open(gitparam_path , 'w') as f:
         f.write(gitparam)
 elif not os.path.isdir(gitparam_path):
-    with open(gitparam, 'w') as f:
+    with open(gitparam_path, 'w') as f:
         f.write('Off')
     gitparam = 'Off'
 else: # if cannot connect, no use to do the update, set this to off instead?
-    with open(gitparam, 'r') as f:
+    with open(gitparam_path, 'r') as f:
         for line in f:
             gitparam = line.rstrip('\n')
             break
 if foldparam != None: #replace the param file or create a new one if not exists, load the file in the last case
-    with open(foldparam, 'w') as f:
+    with open(foldparam_path, 'w') as f:
         f.write(foldparam)
 elif not os.path.isdir(foldparam_path):
-    with open(foldparam, 'w') as f:
+    with open(foldparam_path, 'w') as f:
         f.write('noname')
     foldparam = 'noname'
 else:
-    with open(foldparam, 'r') as f:
+    with open(foldparam_path, 'r') as f:
         for line in f:
             foldparam = line.rstrip('\n')
             break
+
+## Does a gitupdate and reboot if triggered
+if gitparam == "On":
+    GPIO.output(pin_ledg,GPIO.HIGH)
+    GPIO.output(pin_ledb,GPIO.HIGH)
+    GPIO.output(pin_ledr,GPIO.HIGH)
+    sleep(0.2)
+    
+
 
 #creates the picture directory for the event
 path_pictures = os.path.join(path_drive, foldparam)
