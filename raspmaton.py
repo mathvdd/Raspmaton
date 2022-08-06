@@ -52,21 +52,29 @@ if os.path.isfile(os.path.join(path_drive, 'this_is_the_drive')):
     while i < 2:
         sleep(0.2)
         GPIO.output(pin_ledg,GPIO.HIGH)
+        GPIO.output(pin_ledb,GPIO.LOW)
+        GPIO.output(pin_ledr,GPIO.LOW)
         sleep(0.2)
         GPIO.output(pin_ledg,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
+        GPIO.output(pin_ledr,GPIO.LOW)
         i +=1
 else:
     while True:
         sleep(0.2)
         GPIO.output(pin_ledr,GPIO.HIGH)
+        GPIO.output(pin_ledg,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
         sleep(0.2)
         GPIO.output(pin_ledr,GPIO.LOW)
+        GPIO.output(pin_ledg,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
 
 ## try to read config changes on remote website at startup
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
     param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 i=0
-while i<4:#makes 4 connection tries
+while i<3:#trys 3 connection 
     i +=1
     sleep(0.5)
     try: # get the parameters from the remote website
@@ -79,16 +87,20 @@ while i<4:#makes 4 connection tries
             break
         GPIO.output(pin_ledg,GPIO.HIGH)
         GPIO.output(pin_ledb,GPIO.HIGH)
+        GPIO.output(pin_ledr,GPIO.LOW)
         sleep(0.5)
         GPIO.output(pin_ledg,GPIO.LOW)
         GPIO.output(pin_ledb,GPIO.LOW)
+        GPIO.output(pin_ledr,GPIO.LOW)
         break
     except:
         GPIO.output(pin_ledr,GPIO.HIGH)
         GPIO.output(pin_ledb,GPIO.HIGH)
+        GPIO.output(pin_ledr,GPIO.LOW)
         sleep(5)
         GPIO.output(pin_ledr,GPIO.LOW)
         GPIO.output(pin_ledb,GPIO.LOW)
+        GPIO.output(pin_ledr,GPIO.LOW)
         gitparam = None
         foldparam = None
 
@@ -251,13 +263,21 @@ while True:
         raspftp.disconnect(ftp)
         #blink green led
         GPIO.output(pin_ledg,GPIO.HIGH)
+        GPIO.output(pin_ledr,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
         sleep(0.5)
         GPIO.output(pin_ledg,GPIO.LOW)
+        GPIO.output(pin_ledr,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
     except:
         #blink red led
         GPIO.output(pin_ledr,GPIO.HIGH)
+        GPIO.output(pin_ledg,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
         sleep(0.5)
+        GPIO.output(pin_ledg,GPIO.LOW)
         GPIO.output(pin_ledr,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
     
     # takes the picture event
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
