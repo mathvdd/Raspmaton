@@ -81,9 +81,9 @@ else:
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
     param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 i=0
-while i<3:#trys 3 connection 
+while i<5:#try 5 connection 
     i +=1
-    sleep(0.5)
+    led(blue=True,green=False,red=True)
     try: # get the parameters from the remote website
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf')):
             gitparam = line.decode('utf-8')
@@ -93,13 +93,12 @@ while i<3:#trys 3 connection
             foldparam = line.decode('utf-8')
             break
         led(blue=True,green=True,red=False)
-        sleep(0.5)
+        sleep(1)
         led(blue=False,green=False,red=False)
         break
     except:
-        led(blue=True,green=False,red=True)
-        sleep(5)
         led(blue=False,green=False,red=False)
+        sleep(0.5)
         gitparam = None
         foldparam = None
 
