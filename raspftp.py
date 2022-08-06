@@ -48,5 +48,5 @@ if __name__ == "__main__":
    #remote_filelist = check_content(ftp, 'noname')
    #print(remote_filelist)
    upload_content(ftp, 'noname')
-   update_index(ftp, '/home/raspmaton/www')
+   update_index(ftp, os.path.expanduser('~/www'))
    disconnect(ftp)

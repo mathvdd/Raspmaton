@@ -158,6 +158,7 @@ while True:
     with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
         f.write(head+content+foot)
 
+    # try to connect to remote dir
     try:
         ftp = raspftp.connect()
         raspftp.upload_content(ftp, 'noname')
