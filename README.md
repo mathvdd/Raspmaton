@@ -8,8 +8,7 @@ This concisely describe my build of a photo booth with a Raspberry Pi 4. It is t
 - the website is rather simple at the moment, but still has a lazyload feature (with lazysizes)
 - the files are stored in an external USB drive
 - a website with the pictures is updated through ftp (with ftplib)
-
-I plan to add a config.html page where it will be possible to define a project name that will define the folder name where the images are stored, and what images are displayed on the website
+- a config webpage where it will be possible to change the folder where the pictures will be stored and from which they will be displayed, without need to connect to the RPi (and also where it is possible to make an update from this repository)
 
 The previous version was set up to work without internet and instead of the ftp uplaoad had the following features:
 
@@ -69,13 +68,32 @@ Add the following line to */etc/rc.local* just before *exit 0* for launching ras
 
 ## ftp credentials
 
-The ftp credentials need to be stored the 'parameters.txt' file in the following format:
-domain:FTP_DOMAIN
-username:FTP_USERNAME
-password:FTP_PASSWORD
-ftp_www:WEBPAGE_ROOT
+The ftp credentials need to be stored the 'parameters.txt' file in the following format (see rename_parameters for the format)
 
-## (optional) connet to a wifi network
+## Configuration webpage
+
+3 files need to be upladed in the remote ftp directory:
+
+- fold_name.conf
+- git_update.conf
+- config.php
+
+The first 2 will be automatically updated by config.php.
+
+Navigate config.php to:
+
+- change the name of the folder where the pictures will be stored/ from which the pictures will be displayed
+- fetch an update from the github repository (and reboot)
+
+So no need to go change those parameters in the code on the RPi later
+
+## protect the webpage with a password
+
+the webpage can be protected with a password by renaming and updating the given .htaccess and .htpasswd files, and put them on the remote ftp directory. The path to .htpasswd in .htaccess need to be an absolute path. the files holding the configuration are not protected to be easily readable by the RPi. the password can be crypted with the htpasswd utils from the appache utils library (or something like that, look it up)
+
+`htpasswd -b -c FILE_TO_STORE_PWD USERNAME PASSWORD`
+
+## connet to a wifi network
 
 To see available networks:
 
@@ -184,6 +202,8 @@ a 'this_is_the_drive' file need to be on the USB drive so the script can check i
 blue LED -> 1kOhm resistor -> pin 16
 green LED -> 1kOhm resistor -> pin 18
 red LED -> 1kOhm resistor -> pin 22
+
+OUT OF DATE
 
 At startup: the blue led blink when the script start and then stay on. The green led blink twice if the USB drive is mounted. The red blink indefinitely if the USB drive is not mounted (and the rest of the script is not executed)
 
