@@ -69,6 +69,7 @@ with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
 i=0
 while i<3:#makes 3 connection tries (gives 15s to connect to internet)
     try:
+        sleep(0.5)
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf')):
             gitparam = line
             break
