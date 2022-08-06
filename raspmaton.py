@@ -144,7 +144,7 @@ if gitparam == "On":
     GPIO.output(pin_ledr,GPIO.HIGH)
     sleep(0.5)  
     try:
-        os.system(f"/bin/sh -c cd {os.path.expanduser('~/Raspmaton')} && git pull")
+        os.system(f"git -C {os.path.expanduser('~/Raspmaton')} pull")
         with open(gitparam_path, 'w') as f:
             f.write('Off')
         i = 0
