@@ -194,7 +194,7 @@ for filename in os.listdir(path_pictures):
 
 ## main loop
 t0 = time.time()
-GPIO.output(pin_ledb,GPIO.HIGH)
+
 while True:
     # generates the website
     head = '''
@@ -280,6 +280,10 @@ while True:
         GPIO.output(pin_ledb,GPIO.LOW)
     
     # takes the picture event
+    
+    GPIO.output(pin_ledb,GPIO.HIGH)
+    GPIO.output(pin_ledg,GPIO.LOW)
+    GPIO.output(pin_ledr,GPIO.LOW)
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
     pi_pwm.start(0)     # start PWM
