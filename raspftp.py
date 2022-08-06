@@ -12,7 +12,7 @@ import os
 
 def connect():
     with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
-        param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
+        param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 
     ftp = FTP(param.get('domain'))
     ftp.login(user=param.get('username'), passwd = param.get('password'))

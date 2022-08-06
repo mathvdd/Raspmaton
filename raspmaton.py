@@ -64,7 +64,7 @@ else:
 
 ## try to read config changes on remote website at startup
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
-    param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
+    param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 print(param)
 
 i=0
@@ -86,6 +86,7 @@ while i<3:#makes 3 connection tries (gives 15s to connect to internet)
         sleep(0.5)
         GPIO.output(pin_ledg,GPIO.LOW)
         GPIO.output(pin_ledb,GPIO.LOW)
+        break
     except:
         GPIO.output(pin_ledr,GPIO.HIGH)
         GPIO.output(pin_ledb,GPIO.HIGH)
