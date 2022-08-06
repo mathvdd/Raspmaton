@@ -68,10 +68,10 @@ with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
 print(param)
 
 i=0
-while i<3:#makes 3 connection tries (gives 15s to connect to internet)
+while i<5:#makes 3 connection tries (gives 25s to connect to internet)
     i +=1
+    sleep(0.5)
     try:
-        sleep(0.5)
         print(os.path.join(param.get('url_www'), 'git_update.conf'))
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf')):
             gitparam = line
