@@ -166,7 +166,7 @@ if gitparam == "On":
             GPIO.output(pin_ledb,GPIO.LOW)
             GPIO.output(pin_ledr,GPIO.HIGH)
             i +=1
-            
+        os.system("reboot now")
     except:
         i = 0
         while i < 2:
