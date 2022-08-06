@@ -37,13 +37,28 @@ GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin pin_button a
 
 camera = PiCamera()
 
+# led control
+def led(blue=False,green=False,red=False):
+    if blue == True:
+        GPIO.output(pin_ledb,GPIO.HIGH)
+    else:
+        GPIO.output(pin_ledb,GPIO.LOW)
+    if green == True:
+        GPIO.output(pin_ledg,GPIO.HIGH)
+    else:
+        GPIO.output(pin_ledg,GPIO.LOW)
+    if red == True:
+        GPIO.output(pin_ledr,GPIO.HIGH)
+    else:
+        GPIO.output(pin_ledr,GPIO.LOW)
+
 ## blink blue for on
 i = 0
 while i < 3:
     sleep(0.2)
-    GPIO.output(pin_ledb,GPIO.HIGH)
+    led(blue=True,green=False,red=False)
     sleep(0.2)
-    GPIO.output(pin_ledb,GPIO.LOW)
+    led(blue=False,green=False,red=False)
     i +=1
 
 ## check if the USB drive is connected
@@ -51,24 +66,16 @@ if os.path.isfile(os.path.join(path_drive, 'this_is_the_drive')):
     i = 0
     while i < 2:
         sleep(0.2)
-        GPIO.output(pin_ledg,GPIO.HIGH)
-        GPIO.output(pin_ledb,GPIO.LOW)
-        GPIO.output(pin_ledr,GPIO.LOW)
+        led(blue=False,green=True,red=False)
         sleep(0.2)
-        GPIO.output(pin_ledg,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
-        GPIO.output(pin_ledr,GPIO.LOW)
+        led(blue=False,green=False,red=False)
         i +=1
 else:
     while True:
         sleep(0.2)
-        GPIO.output(pin_ledr,GPIO.HIGH)
-        GPIO.output(pin_ledg,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
+        led(blue=False,green=False,red=True)
         sleep(0.2)
-        GPIO.output(pin_ledr,GPIO.LOW)
-        GPIO.output(pin_ledg,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
+        led(blue=False,green=False,red=False)
 
 ## try to read config changes on remote website at startup
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
@@ -85,22 +92,14 @@ while i<3:#trys 3 connection
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf')):
             foldparam = line.decode('utf-8')
             break
-        GPIO.output(pin_ledg,GPIO.HIGH)
-        GPIO.output(pin_ledb,GPIO.HIGH)
-        GPIO.output(pin_ledr,GPIO.LOW)
+        led(blue=True,green=True,red=False)
         sleep(0.5)
-        GPIO.output(pin_ledg,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
-        GPIO.output(pin_ledr,GPIO.LOW)
+        led(blue=False,green=False,red=False)
         break
     except:
-        GPIO.output(pin_ledr,GPIO.HIGH)
-        GPIO.output(pin_ledb,GPIO.HIGH)
-        GPIO.output(pin_ledr,GPIO.LOW)
+        led(blue=True,green=False,red=True)
         sleep(5)
-        GPIO.output(pin_ledr,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
-        GPIO.output(pin_ledr,GPIO.LOW)
+        led(blue=False,green=False,red=False)
         gitparam = None
         foldparam = None
 
@@ -139,9 +138,7 @@ else:
 
 ## Does a gitupdate and reboot if triggered
 if gitparam == "On":
-    GPIO.output(pin_ledg,GPIO.HIGH)
-    GPIO.output(pin_ledb,GPIO.HIGH)
-    GPIO.output(pin_ledr,GPIO.HIGH)
+    led(blue=True,green=True,red=True)
     sleep(0.5)  
     try:
         os.system(f"git -C {os.path.expanduser('~/Raspmaton')} pull")
@@ -154,30 +151,20 @@ if gitparam == "On":
         i = 0
         while i < 2:
             sleep(0.2)
-            GPIO.output(pin_ledg,GPIO.HIGH)
-            GPIO.output(pin_ledb,GPIO.LOW)
-            GPIO.output(pin_ledr,GPIO.LOW)
+            led(blue=False,green=True,red=False)
             sleep(0.2)
-            GPIO.output(pin_ledg,GPIO.LOW)
-            GPIO.output(pin_ledb,GPIO.HIGH)
-            GPIO.output(pin_ledr,GPIO.LOW)
+            led(blue=False,green=False,red=True)
             sleep(0.2)
-            GPIO.output(pin_ledg,GPIO.LOW)
-            GPIO.output(pin_ledb,GPIO.LOW)
-            GPIO.output(pin_ledr,GPIO.HIGH)
+            led(blue=True,green=False,red=False)
             i +=1
-        os.system("reboot now")
+        os.system("sudo reboot now")
     except:
         i = 0
         while i < 2:
             sleep(0.5)
-            GPIO.output(pin_ledg,GPIO.LOW)
-            GPIO.output(pin_ledb,GPIO.LOW)
-            GPIO.output(pin_ledr,GPIO.LOW)
+            led(blue=False,green=False,red=True)
             sleep(0.5)
-            GPIO.output(pin_ledg,GPIO.HIGH)
-            GPIO.output(pin_ledb,GPIO.HIGH)
-            GPIO.output(pin_ledr,GPIO.HIGH)
+            led(blue=True,green=True,red=True)
             i +=1
 
 #creates the picture directory for the event
@@ -266,32 +253,20 @@ while True:
         raspftp.update_index(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
         #blink green led
-        GPIO.output(pin_ledg,GPIO.HIGH)
-        GPIO.output(pin_ledr,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
+        led(blue=False,green=True,red=False)
         sleep(0.5)
-        GPIO.output(pin_ledg,GPIO.LOW)
-        GPIO.output(pin_ledr,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
+        led(blue=False,green=False,red=False)
     except:
         #blink red led
-        GPIO.output(pin_ledr,GPIO.HIGH)
-        GPIO.output(pin_ledg,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
+        led(blue=False,green=False,red=True)
         sleep(0.5)
-        GPIO.output(pin_ledg,GPIO.LOW)
-        GPIO.output(pin_ledr,GPIO.LOW)
-        GPIO.output(pin_ledb,GPIO.LOW)
+        led(blue=False,green=False,red=False)
     
     # takes the picture event
     
-    GPIO.output(pin_ledb,GPIO.HIGH)
-    GPIO.output(pin_ledg,GPIO.LOW)
-    GPIO.output(pin_ledr,GPIO.LOW)
+    led(blue=True,green=False,red=False)
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
-    GPIO.output(pin_ledb,GPIO.LOW)
-    GPIO.output(pin_ledg,GPIO.LOW)
-    GPIO.output(pin_ledr,GPIO.LOW)
+    led(blue=False,green=False,red=False)
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
     pi_pwm.start(0)     # start PWM
     for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
