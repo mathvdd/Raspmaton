@@ -10,6 +10,7 @@ import time
 from picamera import PiCamera
 import raspftp
 from time import sleep
+import urllib.request
 
 ## some parameters
 path_www = os.path.join(os.path.expanduser('~'), 'www') #path to the www directory
@@ -61,7 +62,33 @@ else:
         sleep(0.2)
         GPIO.output(pin_ledr,GPIO.LOW)
 
-## initiating file system
+## try to read config changes on remote website at startup
+with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
+    param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
+
+i=0
+while i<3:#makes 3 connection tries (gives 15s to connect to internet)
+    try:
+        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf')):
+            gitparam = line
+            break
+        
+        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf')):
+            foldparam = line
+            break
+        GPIO.output(pin_ledg,GPIO.HIGH)
+        GPIO.output(pin_ledb,GPIO.HIGH)
+        sleep(0.5)
+        GPIO.output(pin_ledg,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
+    except:
+        GPIO.output(pin_ledr,GPIO.HIGH)
+        GPIO.output(pin_ledb,GPIO.HIGH)
+        sleep(5)
+        GPIO.output(pin_ledr,GPIO.LOW)
+        GPIO.output(pin_ledb,GPIO.LOW)
+
+## initiating local file system
 
 # generates the www dir if not exists and write the config file if not exists
 config_path = os.path.join(path_www, 'config.txt')

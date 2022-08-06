@@ -50,6 +50,7 @@ if git not installed:
 
 `git pull` while in the directory to update it from github
 
+
 ## Raspmaton and generate website script
 
 The main script to control the photobooth and generate the website is **raspmaton.py**
@@ -106,7 +107,7 @@ Connect the camera in the OS:
 
 Install the picamera python module:
 
-`sudo apt install python3-pip`
+(if not already done: `sudo apt install python3-pip`)
 
 `pip3 install picamera`
 
@@ -186,7 +187,7 @@ red LED -> 1kOhm resistor -> pin 22
 
 At startup: the blue led blink when the script start and then stay on. The green led blink twice if the USB drive is mounted. The red blink indefinitely if the USB drive is not mounted (and the rest of the script is not executed)
 
-When the website is updated through ftp: green blink means successful, red blink means failure (but the picture will still be saved on the USB drive and uploaded at next successful update) 
+When the website is updated through ftp: green blink means successful, red blink means failure (but the picture will still be saved on the USB drive and uploaded at next successful update)
 
 ## Adding a fan
 
