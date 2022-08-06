@@ -144,7 +144,7 @@ if gitparam == "On":
     GPIO.output(pin_ledr,GPIO.HIGH)
     sleep(0.5)  
     try:
-        os(f"cd {os.path.expanduser('~/Raspmaton/')} && git pull")
+        os.system(f"/bin/sh -c cd {os.path.expanduser('~/Raspmaton')} && git pull")
         with open(gitparam_path, 'w') as f:
             f.write('Off')
         i = 0
@@ -285,6 +285,9 @@ while True:
     GPIO.output(pin_ledg,GPIO.LOW)
     GPIO.output(pin_ledr,GPIO.LOW)
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
+    GPIO.output(pin_ledb,GPIO.LOW)
+    GPIO.output(pin_ledg,GPIO.LOW)
+    GPIO.output(pin_ledr,GPIO.LOW)
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
     pi_pwm.start(0)     # start PWM
     for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
