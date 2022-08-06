@@ -149,15 +149,15 @@ if gitparam == "On":
             f.write('Off')
         i = 0
         while i < 2:
-            sleep(0.2)
+            sleep(0.5)
             GPIO.output(pin_ledg,GPIO.HIGH)
             GPIO.output(pin_ledb,GPIO.LOW)
             GPIO.output(pin_ledr,GPIO.LOW)
-            sleep(0.2)
+            sleep(0.5)
             GPIO.output(pin_ledg,GPIO.LOW)
             GPIO.output(pin_ledb,GPIO.HIGH)
             GPIO.output(pin_ledr,GPIO.LOW)
-            sleep(0.2)
+            sleep(0.5)
             GPIO.output(pin_ledg,GPIO.LOW)
             GPIO.output(pin_ledb,GPIO.LOW)
             GPIO.output(pin_ledr,GPIO.HIGH)
@@ -166,11 +166,11 @@ if gitparam == "On":
     except:
         i = 0
         while i < 2:
-            sleep(0.2)
+            sleep(0.5)
             GPIO.output(pin_ledg,GPIO.HIGH)
             GPIO.output(pin_ledb,GPIO.HIGH)
             GPIO.output(pin_ledr,GPIO.HIGH)
-            sleep(0.2)
+            sleep(0.5)
             GPIO.output(pin_ledg,GPIO.LOW)
             GPIO.output(pin_ledb,GPIO.LOW)
             GPIO.output(pin_ledr,GPIO.LOW)
