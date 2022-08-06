@@ -71,11 +71,11 @@ while i<4:#makes 4 connection tries
     sleep(0.5)
     try: # get the parameters from the remote website
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf')):
-            gitparam = line
+            gitparam = line.decode('utf-8')
             break
         
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf')):
-            foldparam = line
+            foldparam = line.decode('utf-8')
             break
         GPIO.output(pin_ledg,GPIO.HIGH)
         GPIO.output(pin_ledb,GPIO.HIGH)
