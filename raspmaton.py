@@ -65,13 +65,17 @@ else:
 ## try to read config changes on remote website at startup
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
     param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
+print(param)
 
 i=0
 while i<3:#makes 3 connection tries (gives 15s to connect to internet)
+    i +=1
     try:
         sleep(0.5)
+        print(os.path.join(param.get('url_www'), 'git_update.conf'))
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf')):
             gitparam = line
+            print(line)
             break
         
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf')):
