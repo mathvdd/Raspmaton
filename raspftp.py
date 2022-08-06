@@ -29,11 +29,13 @@ def check_content(ftp_object, subdir):
     return ftp.nlst(subdir)
 
 def upload_content(ftp, subdir):
-   remote_list = ftp.nlst(subdir)
-   local_list = os.listdir(os.path.join(os.path.expanduser('~/USBdrive'), subdir))
-   for im in local_list:
-      if im not in remote_list:
-         ftp.storbinary('STOR '+os.path.join(subdir,im), open(os.path.join(os.path.expanduser('~/USBdrive'), subdir, im), 'rb'))
+    remote_list = ftp.nlst(subdir)
+    if len(remote_list) == 0:
+        ftp.mkd(subdir)
+    local_list = os.listdir(os.path.join(os.path.expanduser('~/USBdrive'), subdir))
+    for im in local_list:
+       if im not in remote_list:
+          ftp.storbinary('STOR '+os.path.join(subdir,im), open(os.path.join(os.path.expanduser('~/USBdrive'), subdir, im), 'rb'))
 
 def update_index(ftp, local_dir):
    ftp.storbinary('STOR '+'index.html', open(os.path.join(local_dir,'raspmaton.html'), 'rb'))
@@ -48,5 +50,5 @@ if __name__ == "__main__":
    #remote_filelist = check_content(ftp, 'noname')
    #print(remote_filelist)
    upload_content(ftp, 'noname')
-   update_index(ftp, os.path.expanduser('~/www'))
+   # update_index(ftp, os.path.expanduser('~/www'))
    disconnect(ftp)
