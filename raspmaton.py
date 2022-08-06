@@ -130,9 +130,39 @@ if gitparam == "On":
     GPIO.output(pin_ledg,GPIO.HIGH)
     GPIO.output(pin_ledb,GPIO.HIGH)
     GPIO.output(pin_ledr,GPIO.HIGH)
-    sleep(0.2)
-    
-
+    sleep(0.2)  
+    try:
+        os(f"cd {os.path.expanduser('~/Raspmaton/')} && git pull")
+        with open(gitparam_path, 'w') as f:
+            f.write('Off')
+        i = 0
+        while i < 2:
+            sleep(0.2)
+            GPIO.output(pin_ledg,GPIO.HIGH)
+            GPIO.output(pin_ledb,GPIO.LOW)
+            GPIO.output(pin_ledr,GPIO.LOW)
+            sleep(0.2)
+            GPIO.output(pin_ledg,GPIO.LOW)
+            GPIO.output(pin_ledb,GPIO.HIGH)
+            GPIO.output(pin_ledr,GPIO.LOW)
+            sleep(0.2)
+            GPIO.output(pin_ledg,GPIO.LOW)
+            GPIO.output(pin_ledb,GPIO.LOW)
+            GPIO.output(pin_ledr,GPIO.HIGH)
+            i +=1
+            
+    except:
+        i = 0
+        while i < 2:
+            sleep(0.2)
+            GPIO.output(pin_ledg,GPIO.HIGH)
+            GPIO.output(pin_ledb,GPIO.HIGH)
+            GPIO.output(pin_ledr,GPIO.HIGH)
+            sleep(0.2)
+            GPIO.output(pin_ledg,GPIO.LOW)
+            GPIO.output(pin_ledb,GPIO.LOW)
+            GPIO.output(pin_ledr,GPIO.LOW)
+            i +=1
 
 #creates the picture directory for the event
 path_pictures = os.path.join(path_drive, foldparam)
