@@ -40,6 +40,9 @@ def upload_content(ftp, subdir):
 def update_index(ftp, local_dir):
    ftp.storbinary('STOR '+'index.html', open(os.path.join(local_dir,'raspmaton.html'), 'rb'))
    #ftp.storbinary('STOR '+'lazysizes.min.js', open(os.path.join(local_dir,'lazysizes.min.js'), 'rb'))
+def update_git_update(ftp, local_dir):
+   ftp.storbinary('STOR '+'git_update.conf', open(os.path.join(local_dir,'git_update.conf'), 'rb'))   
+   
 def disconnect(ftp):
     ftp.quit()
 

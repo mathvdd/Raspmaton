@@ -147,6 +147,10 @@ if gitparam == "On":
         os.system(f"git -C {os.path.expanduser('~/Raspmaton')} pull")
         with open(gitparam_path, 'w') as f:
             f.write('Off')
+        ftp = raspftp.connect()
+        raspftp.update_git_update(ftp, os.path.expanduser('~/www'))
+        raspftp.disconnect(ftp)
+        
         i = 0
         while i < 2:
             sleep(0.2)
