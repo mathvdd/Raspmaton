@@ -216,7 +216,7 @@ The fan is controlled by a python script reading the temperature sensor of the R
 Layout:
 
 - RPi pin 4 (GND) to transistor emitter
-- RPi pin 6 (GPIO 14) to transistor base
+- RPi pin 6 (GPIO 14) to 1kOhm resistor to transistor base
 - Fan negative to transistor collector
 - Fan positive to RPi pin 2 (5V)
 
