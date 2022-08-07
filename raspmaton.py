@@ -81,7 +81,7 @@ else:
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
     param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 i=0
-while i<5:# try 5 connection 
+while i<4:# try 5 connection 
     i +=1
     led(blue=True,green=False,red=True)
     try: # get the parameters from the remote website
@@ -97,6 +97,7 @@ while i<5:# try 5 connection
         led(blue=False,green=False,red=False)
         break
     except:
+        sleep(5)
         led(blue=False,green=False,red=False)
         sleep(0.5)
         gitparam = None
