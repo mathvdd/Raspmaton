@@ -114,7 +114,7 @@ if not os.path.isdir(path_www): #creating the www folder if not exists
 if gitparam != None: #replace the param file or create a new one if not exists, load the file in the last case
     with open(gitparam_path , 'w') as f:
         f.write(gitparam)
-elif not os.path.isdir(gitparam_path):
+elif not os.path.isfile(gitparam_path):
     with open(gitparam_path, 'w') as f:
         f.write('Off')
     gitparam = 'Off'
@@ -126,7 +126,7 @@ else: # if cannot connect, no use to do the update, set this to off instead?
 if foldparam != None: #replace the param file or create a new one if not exists, load the file in the last case
     with open(foldparam_path, 'w') as f:
         f.write(foldparam)
-elif not os.path.isdir(foldparam_path):
+elif not os.path.isfile(foldparam_path):
     with open(foldparam_path, 'w') as f:
         f.write('noname')
     foldparam = 'noname'
