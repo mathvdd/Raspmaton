@@ -131,7 +131,7 @@ Install the picamera python module:
 
 Take a first picture to test the camera:
 
-`python Raspmaton/camera_test.py`
+`python Raspmaton/cameratest.py`
 
 ## Light setup
 
