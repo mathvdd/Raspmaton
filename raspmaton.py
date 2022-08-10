@@ -81,23 +81,22 @@ else:
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
     param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 i=0
-while i<4:# try 5 connection 
+while i<4:# try connections 
     i +=1
     led(blue=True,green=False,red=True)
     try: # get the parameters from the remote website
-        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf')):
+        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf'), timeout=5):
             gitparam = line.decode('utf-8')
             break
         
-        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf')):
+        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf'), timeout=2):
             foldparam = line.decode('utf-8')
             break
         led(blue=True,green=True,red=False)
-        sleep(1)
+        sleep(2)
         led(blue=False,green=False,red=False)
         break
     except:
-        sleep(5)
         led(blue=False,green=False,red=False)
         sleep(0.5)
         gitparam = None
@@ -147,7 +146,7 @@ if gitparam == "On":
         os.system(f"git -C {os.path.expanduser('~/Raspmaton')} pull")
         with open(gitparam_path, 'w') as f:
             f.write('Off')
-        ftp = raspftp.connect()
+        ftp = raspftp.connect(5)
         raspftp.update_git_update(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
         
@@ -251,7 +250,7 @@ while True:
 
     # try to connect to remote dir
     try:
-        ftp = raspftp.connect()
+        ftp = raspftp.connect(2)
         raspftp.upload_content(ftp, foldparam)
         raspftp.update_index(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)

@@ -10,12 +10,13 @@ import os
 #with open("parameters.txt") as f:
 #    param = dict(i.rstrip().split(':') for i in f if i.startswith('#') == False)
 
-def connect():
+def connect(timeout):
     with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
         param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 
-    ftp = FTP(param.get('domain'))
-    ftp.login(user=param.get('username'), passwd = param.get('password'))
+    ftp = FTP(host=param.get('domain'), user=param.get('username'), passwd=param.get('password'), timeout=timeout)
+    # ftp = FTP(param.get('domain'))
+    # ftp.login(user=param.get('username'), passwd = param.get('password'))
     ftp.cwd(param.get('ftp_www'))
     return ftp
 
@@ -49,7 +50,7 @@ def disconnect(ftp):
 if __name__ == "__main__":
    # filename = 'qr.svg'
    # ftp.storbinary('STOR '+filename, open(filename, 'rb'))
-   ftp = connect()
+   ftp = connect(5)
    #remote_filelist = check_content(ftp, 'noname')
    #print(remote_filelist)
    upload_content(ftp, 'noname')
