@@ -85,11 +85,11 @@ while i<4:# try connections
     i +=1
     led(blue=True,green=False,red=True)
     try: # get the parameters from the remote website
-        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf'), timeout=5):
+        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf'), timeout=1):
             gitparam = line.decode('utf-8')
             break
         
-        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf'), timeout=2):
+        for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf'), timeout=1):
             foldparam = line.decode('utf-8')
             break
         led(blue=True,green=True,red=False)
@@ -97,6 +97,7 @@ while i<4:# try connections
         led(blue=False,green=False,red=False)
         break
     except:
+        sleep(4)
         led(blue=False,green=False,red=False)
         sleep(0.5)
         gitparam = None
