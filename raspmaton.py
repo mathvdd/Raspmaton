@@ -136,6 +136,9 @@ else:
             foldparam = line.rstrip('\n')
             break
 
+gitparam = gitparam.rstrip('\n')
+foldparam = foldparam.rstrip('\n')
+            
 ## Does a gitupdate and reboot if triggered
 if gitparam == "On":
     led(blue=True,green=True,red=True)
