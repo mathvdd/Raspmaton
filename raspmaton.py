@@ -251,7 +251,7 @@ while True:
 
     # try to connect to remote dir
     try:
-        ftp = raspftp.connect(2)
+        ftp = raspftp.connect()
         raspftp.upload_content(ftp, foldparam)
         raspftp.update_index(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
