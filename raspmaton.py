@@ -58,7 +58,7 @@ def led(blue=False,green=False,red=False):
         GPIO.output(pin_ledr,GPIO.LOW)
 
 ## blink blue for on
-set_status('Démarrage')
+set_status('Demarrage')
 i = 0
 while i < 3:
     sleep(0.2)
@@ -69,7 +69,7 @@ while i < 3:
 
 ## check if the USB drive is connected
 if os.path.isfile(os.path.join(path_drive, 'this_is_the_drive')):
-    set_status('USB connecté')
+    set_status('USB connecte')
     i = 0
     while i < 2:
         sleep(0.2)
@@ -152,7 +152,7 @@ foldparam = foldparam.rstrip('\n')
 
 ## Does a gitupdate and reboot if triggered
 if gitparam == "On":
-    set_status('git update activated')
+    set_status('Git update activated')
     led(blue=True,green=True,red=True)
     sleep(0.5)
     try:
@@ -164,7 +164,7 @@ if gitparam == "On":
         raspftp.disconnect(ftp)
 
         i = 0
-        set_status('update successful')
+        set_status('Update successful')
         while i < 2:
             sleep(0.2)
             led(blue=False,green=True,red=False)
@@ -176,7 +176,7 @@ if gitparam == "On":
         os.system("sudo reboot now")
     except:
         i = 0
-        set_status('update error')
+        set_status('Update error')
         while i < 2:
             sleep(0.5)
             led(blue=False,green=False,red=True)

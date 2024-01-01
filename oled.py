@@ -49,12 +49,15 @@ while True:
 	except:
 		status = 'error reading status'
 
-
-	draw.text((0,0), status, font=font, fill=255)
-	draw.text((0,50), str(round(tnow-tstart,2)), font=font, fill=255)
-	draw.text((0,12), f"Wifi: {str(int(sig/0.7))}% {SSID}", font=font, fill=255)
-	draw.text((0,22), f"IP: {IP}",  font=font, fill=255)
-	draw.text((0,34), f"T:{temp}°C CPU:{CPU} Mem:{str(Mem)}%", font=font, fill=255)
+    draw.text((0,0), status, font=font, fill=255)
+	#draw.text((0,50), str(round(tnow-tstart,2)), font=font, fill=255)
+	draw.text((0,16), f"Wifi:", font=font, fill=255)
+	draw.text((24,16), f"{str(int(sig/0.7))}%", font=font, fill=255)
+	draw.text((54,16), f"{SSID}", font=font, fill=255)
+	draw.text((0,26), f"IP: {IP}",  font=font, fill=255)
+	draw.text((0,42), f"CPU: {CPU}", font=font, fill=255)
+	draw.text((64,42), f"Mem: {str(Mem)}%", font=font, fill=255)
+	draw.text((0,54), f"T: {temp}°C", font=font, fill=255)
 
 	# Display to screen
 	disp.image(image)  # set display buffer with image buffer
