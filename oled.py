@@ -44,7 +44,7 @@ while True:
 	temp = subprocess.check_output(cmd, shell=True).decode().strip('\n').split('.')[0]
 
 	try:
-		with open(os.path.join(os.path.expanduser('~'), 'Raspmaton', 'status')):
+		with open(os.path.join(os.path.expanduser('~'), 'Raspmaton', 'status'), 'r') as file:
 			status = file.read()
 	except:
 		status = 'error reading status'
