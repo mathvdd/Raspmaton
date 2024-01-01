@@ -38,7 +38,7 @@ GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin pin_button a
 
 camera = PiCamera()
 
-def set_status(status)
+def set_status(status):
     with open(path_status, 'w') as file:
         file.write(status)
 
