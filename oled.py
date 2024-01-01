@@ -49,7 +49,7 @@ while True:
 	except:
 		status = 'error reading status'
 
-    draw.text((0,0), status, font=font, fill=255)
+	draw.text((0,0), status, font=font, fill=255)
 	#draw.text((0,50), str(round(tnow-tstart,2)), font=font, fill=255)
 	draw.text((0,16), f"Wifi:", font=font, fill=255)
 	draw.text((24,16), f"{str(int(sig/0.7))}%", font=font, fill=255)
