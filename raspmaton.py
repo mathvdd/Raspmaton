@@ -108,7 +108,6 @@ while i<4:# try connections
         led(blue=False,green=False,red=False)
         break
     except:
-        set_status('Erreur internet')
         sleep(4)
         led(blue=False,green=False,red=False)
         sleep(0.5)
@@ -271,13 +270,13 @@ while True:
         raspftp.update_index(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
         #blink green led
-        set_status('ftp uploaded')
+        set_status('FTP uploaded')
         led(blue=False,green=True,red=False)
         sleep(0.5)
         led(blue=False,green=False,red=False)
     except:
         #blink red led
-        set_status('ftp_error')
+        set_status('FTP error')
         led(blue=False,green=False,red=True)
         sleep(0.5)
         led(blue=False,green=False,red=False)
@@ -286,7 +285,7 @@ while True:
     set_status('Ready!')
     led(blue=True,green=False,red=False)
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
-    set_status('photo en cours')
+    set_status('Photo en cours')
     led(blue=False,green=False,red=False)
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
     pi_pwm.start(0)     # start PWM

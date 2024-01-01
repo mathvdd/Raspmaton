@@ -258,7 +258,7 @@ Possible prerequisites:
 
 Add the following line to */etc/rc.local* just before *exit 0* for launching oled.py at boot:
 
-> python /home/USERNAME/Raspmaton/oled.py &
+> sudo -u USERNAME python /home/USERNAME/Raspmaton/oled.py &
 
 ### some more commands
 
