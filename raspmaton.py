@@ -5,7 +5,7 @@ https://github.com/mathvdd/Raspmaton
 '''
 
 import os
-import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO
 import time
 from picamera import PiCamera
 import raspftp
@@ -14,6 +14,7 @@ import urllib.request
 
 ## some parameters
 path_www = os.path.join(os.path.expanduser('~'), 'www') #path to the www directory
+path_status = os.path.join(os.path.expanduser('~'), 'Raspmaton', 'status')
 drive_name = 'USBdrive'
 path_drive = os.path.join(os.path.expanduser('~'), drive_name)
 pin_button = 10 # pin to receive the button input
@@ -37,6 +38,10 @@ GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin pin_button a
 
 camera = PiCamera()
 
+def set_status(status)
+    with open(path_status, 'w') as file:
+        file.write(status)
+
 # led control
 def led(blue=False,green=False,red=False):
     if blue == True:
@@ -53,6 +58,7 @@ def led(blue=False,green=False,red=False):
         GPIO.output(pin_ledr,GPIO.LOW)
 
 ## blink blue for on
+set_status('Démarrage')
 i = 0
 while i < 3:
     sleep(0.2)
@@ -63,6 +69,7 @@ while i < 3:
 
 ## check if the USB drive is connected
 if os.path.isfile(os.path.join(path_drive, 'this_is_the_drive')):
+    set_status('USB connecté')
     i = 0
     while i < 2:
         sleep(0.2)
@@ -71,6 +78,7 @@ if os.path.isfile(os.path.join(path_drive, 'this_is_the_drive')):
         led(blue=False,green=False,red=False)
         i +=1
 else:
+    set_status('USB manquant!')
     while True:
         sleep(0.2)
         led(blue=False,green=False,red=True)
@@ -78,25 +86,29 @@ else:
         led(blue=False,green=False,red=False)
 
 ## try to read config changes on remote website at startup
+
+set_status('Essai internet')
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
     param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 i=0
-while i<4:# try connections 
+while i<4:# try connections
     i +=1
     led(blue=True,green=False,red=True)
     try: # get the parameters from the remote website
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'git_update.conf'), timeout=1):
             gitparam = line.decode('utf-8')
             break
-        
+
         for line in urllib.request.urlopen(os.path.join(param.get('url_www'), 'fold_name.conf'), timeout=1):
             foldparam = line.decode('utf-8')
             break
+        set_status('Internet OK')
         led(blue=True,green=True,red=False)
         sleep(2)
         led(blue=False,green=False,red=False)
         break
     except:
+        set_status('Erreur internet')
         sleep(4)
         led(blue=False,green=False,red=False)
         sleep(0.5)
@@ -108,9 +120,9 @@ gitparam_path = os.path.join(path_www, 'git_update.conf')
 foldparam_path = os.path.join(path_www, 'fold_name.conf')
 
 if not os.path.isdir(path_www): #creating the www folder if not exists
-    os.mkdir(path_www) 
+    os.mkdir(path_www)
 
-# save params as file so can be kept between boots    
+# save params as file so can be kept between boots
 if gitparam != None: #replace the param file or create a new one if not exists, load the file in the last case
     with open(gitparam_path , 'w') as f:
         f.write(gitparam)
@@ -138,11 +150,12 @@ else:
 
 gitparam = gitparam.rstrip('\n')
 foldparam = foldparam.rstrip('\n')
-            
+
 ## Does a gitupdate and reboot if triggered
 if gitparam == "On":
+    set_status('git update activated')
     led(blue=True,green=True,red=True)
-    sleep(0.5)  
+    sleep(0.5)
     try:
         os.system(f"git -C {os.path.expanduser('~/Raspmaton')} pull")
         with open(gitparam_path, 'w') as f:
@@ -150,8 +163,9 @@ if gitparam == "On":
         ftp = raspftp.connect(5)
         raspftp.update_git_update(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
-        
+
         i = 0
+        set_status('update successful')
         while i < 2:
             sleep(0.2)
             led(blue=False,green=True,red=False)
@@ -163,6 +177,7 @@ if gitparam == "On":
         os.system("sudo reboot now")
     except:
         i = 0
+        set_status('update error')
         while i < 2:
             sleep(0.5)
             led(blue=False,green=False,red=True)
@@ -227,7 +242,7 @@ while True:
         if filename.endswith('.jpg'): #just some checks
             path_file = os.path.join(path_pictures, filename)
             if not_lazy <3: #load the first 3 images
-                try:    
+                try:
                     file_count = int(filename[-8:-4])
                     content += '''<div class="imgbox">
                         <img class="center-fit" src='{}'>
@@ -244,8 +259,8 @@ while True:
                     </div>'''.format('.' + path_file.split(path_drive)[1])
                     #</div>''.format(drive_name + path_file.split(path_drive)[1])
                 except:
-                    pass 
-    
+                    pass
+
     with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
         f.write(head+content+foot)
 
@@ -256,23 +271,26 @@ while True:
         raspftp.update_index(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
         #blink green led
+        set_status('ftp uploaded')
         led(blue=False,green=True,red=False)
         sleep(0.5)
         led(blue=False,green=False,red=False)
     except:
         #blink red led
+        set_status('ftp_error')
         led(blue=False,green=False,red=True)
         sleep(0.5)
         led(blue=False,green=False,red=False)
-    
+
     # takes the picture event
-    
+    set_status('Ready!')
     led(blue=True,green=False,red=False)
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
+    set_status('photo en cours')
     led(blue=False,green=False,red=False)
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
     pi_pwm.start(0)     # start PWM
-    for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to 
+    for j in range(2): #makes 2 fade cycles before taking the picture, corresponding roughly to
         for i in range(1,101,1): # gradually light up
             pi_pwm.ChangeDutyCycle(i)
             time.sleep(1/feed_out_frequency)

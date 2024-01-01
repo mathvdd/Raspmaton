@@ -1,6 +1,6 @@
 # Raspmaton
 
-This concisely describe my build of a photo booth with a Raspberry Pi 4. It is there for me as notes so not always didactic and well written but could help if you are trying to do the same thing. The features of the photo booth are:
+This concisely describe my build of a photo booth with a Raspberry Pi 4. The primary use of this repository is personal notes but could help if you are trying to do the same thing. The features of the photo booth are:
 
 - No screen (The booth has a mirror and not a screen for people to pose)
 - the shot is indicated by a led strip blinking
@@ -112,6 +112,9 @@ continue with SSID the name of the wifi network to connect to and PASSWORD
 To see registered networks or manually add networks:
 
 `sudo nano /etc/wpa_supplicant/wpa_supplicant.conf`
+
+Alternatively, put a `wpa_supplicant.conf` file in the boot partition of the SD card with the wifis SSID and password
+
 
 # Hardware
 
@@ -227,6 +230,35 @@ Add the following line to */etc/rc.local* just before *exit 0* for launching fan
 > python /home/USERNAME/Raspmaton/fancontrol.py &
 
 `sudo reboot`
+
+## Adding OLED display
+
+Adding a 0.96'' 128x64 SSD1306 OLED I2C display
+
+The display is connected the following way:
+
+- SCL -> Rpi pin 5
+- SDA -> Rpi pin 3
+- VCC -> Rpi pin 17 (3.3V)
+- GND -> Rpi pin 9
+
+to enable I2C interface:
+
+`sudo raspi-config` -> interfacing option -> I2C option -> Enable
+
+probably needs a reboot
+
+can see if the screen is detected with:
+
+'sudo apt-get install i2c-tools' and 'i2cdetect -y 1'
+
+Possible prerequisites:
+
+'sudo apt install -y python3-smbus'
+
+Add the following line to */etc/rc.local* just before *exit 0* for launching oled.py at boot:
+
+> python /home/USERNAME/Raspmaton/oled.py &
 
 ### some more commands
 
