@@ -2,6 +2,7 @@ import time
 import Adafruit_SSD1306
 from PIL import Image, ImageDraw, ImageFont
 import subprocess
+import os
 
 min_refresh_rate = 0.5 #in seconds
 
@@ -42,8 +43,8 @@ while True:
 	cmd = "/usr/bin/vcgencmd measure_temp | awk -F \"[=']\" '{print($2)}'"
 	temp = subprocess.check_output(cmd, shell=True).decode().strip('\n').split('.')[0]
 
-    with open(os.path.join(os.path.expanduser('~'), 'Raspmaton', 'status'), 'r') as file:
-        status = file.read()
+	with open(os.path.join(os.path.expanduser('~'), 'Raspmaton', 'status'), 'r') as file:
+		status = file.read()
 
 	draw.text((0,0), status, font=font, fill=255)
 	draw.text((0,50), str(round(tnow-tstart,2)), font=font, fill=255)
