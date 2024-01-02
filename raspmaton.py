@@ -202,39 +202,40 @@ for filename in os.listdir(path_pictures):
 
 ## main loop
 t0 = time.time()
+head = '''
+<!DOCTYPE html>
+    <html>
+      <head>
+        <title>
+          Raspmaton gallery
+        </title>
+        <style>
+          * {
+              margin: 0;
+              padding: 0;
+              margin-bottom: 1vh;
+          }
+          .imgbox {
+              display: grid;
+              height: 100%;
+          }
+          .center-fit {
+              max-width: 100%;
+              margin: auto;
+          }
+        </style>
+        <script src="lazysizes.min.js" async=""></script>
+      </head>
+      <body>
+'''
+foot = '''
+            </body>
+    </html>
+'''
 
 while True:
     # generates the website
-    head = '''
-    <!DOCTYPE html>
-        <html>
-          <head>
-            <title>
-              Raspmaton gallery
-            </title>
-            <style>
-              * {
-                  margin: 0;
-                  padding: 0;
-                  margin-bottom: 1vh;
-              }
-              .imgbox {
-                  display: grid;
-                  height: 100%;
-              }
-              .center-fit {
-                  max-width: 100%;
-                  margin: auto;
-              }
-            </style>
-            <script src="lazysizes.min.js" async=""></script>
-          </head>
-          <body>
-    '''
-    foot = '''
-                </body>
-        </html>
-    '''
+    set_status('Generate website')
     content =''
     not_lazy = 0 #this is ised for not lazy loadeing the first images in the viewport
     for filename in sorted(os.listdir(path_pictures), reverse=True):
