@@ -87,7 +87,7 @@ else:
 
 ## try to read config changes on remote website at startup
 
-set_status('Essai internet')
+set_status('Tentative internet')
 with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
     param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 i=0
@@ -265,12 +265,12 @@ while True:
 
     # try to connect to remote dir
     try:
+        set_status('FTP upload')
         ftp = raspftp.connect()
         raspftp.upload_content(ftp, foldparam)
         raspftp.update_index(ftp, os.path.expanduser('~/www'))
         raspftp.disconnect(ftp)
         #blink green led
-        set_status('FTP uploaded')
         led(blue=False,green=True,red=False)
         sleep(0.5)
         led(blue=False,green=False,red=False)

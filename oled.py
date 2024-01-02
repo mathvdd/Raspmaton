@@ -6,6 +6,8 @@ import os
 
 min_refresh_rate = 0.5 #in seconds
 
+path_drive = os.path.join(os.path.expanduser('~'), 'USBdrive')
+
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=None)
 
 disp.begin() # initiate graphic library
@@ -49,6 +51,11 @@ while True:
 	except:
 		status = 'error reading status'
 
+	with open(os.path.join(os.path.expanduser('~'), 'www', 'fold_name.conf'), 'r') as file:
+		im_folder = file.read()
+	im_path = os.path.join(path_drive, im_folder)
+	nim = len(os.listdir(im_path))
+
 	draw.text((0,0), status, font=font, fill=255)
 	#draw.text((0,50), str(round(tnow-tstart,2)), font=font, fill=255)
 	draw.text((0,16), f"Wifi:", font=font, fill=255)
@@ -58,6 +65,7 @@ while True:
 	draw.text((0,42), f"CPU: {CPU}", font=font, fill=255)
 	draw.text((64,42), f"Mem: {str(Mem)}%", font=font, fill=255)
 	draw.text((0,54), f"T: {temp}°C", font=font, fill=255)
+	draw.text((64,54), f"#im: {nim}", font=font, fill=255)
 
 	# Display to screen
 	disp.image(image)  # set display buffer with image buffer
