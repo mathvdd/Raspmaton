@@ -9,7 +9,7 @@ import os
 #from raspmaton import import_params
 
 def import_params():
-    with open(os.path.expanduser('parameters.txt')) as f:
+    with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
         param = {i.rstrip().split(':',1)[0]:os.path.expanduser(i.rstrip().split(':',1)[1]) for i in f if i.startswith('#') == False}
     return param
 
