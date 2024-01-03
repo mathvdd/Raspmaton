@@ -191,7 +191,6 @@ if __name__ == "__main__":
                     ftp.storbinary('STOR '+os.path.join(foldname,im), open(os.path.join(param.get('path_drive'), foldname, im), 'rb'))
                 remote_files = check_content(ftp, foldname)
                 disconnect(ftp)
-                set_FTPstatus('Wait')
 
             except:
                 #blink red led
@@ -200,7 +199,7 @@ if __name__ == "__main__":
                 time.sleep(0.5)
                 #led(blue=False,green=False,red=False)
         else:
-            set_FTPstatus('Wait')
+            set_FTPstatus('A jour')
 
         try:
             time.sleep(min_refresh_rate - ((time.time() - tnow)))
