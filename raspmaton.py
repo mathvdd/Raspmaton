@@ -37,7 +37,7 @@ camera = PiCamera()
 def import_params():
     with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
         param = {i.rstrip().split(':',1)[0]:os.path.expanduser(i.rstrip().split(':',1)[1]) for i in f if i.startswith('#') == False}
-    return params
+    return param
 param = import_params()
 
 def set_status(status):

@@ -119,7 +119,7 @@ if __name__ == "__main__":
     #get folder name that was setup by raspmaton.py
     foldparam_path = os.path.join(param['path_www'], 'fold_name.conf')
     with open(foldparam_path, 'r') as f:
-        foldname = f.rstrip('\n')
+        foldname = f.read().rstrip('\n')
 
     # start with a first check and look what is on the server
     try:
@@ -130,14 +130,14 @@ if __name__ == "__main__":
         disconnect(ftp)
         #blink green led
         #led(blue=False,green=True,red=False)
-        sleep(0.5)
+        time.sleep(0.5)
         #led(blue=False,green=False,red=False)
     except:
         #blink red led
         set_FTPstatus('Error')
         remote_files = []
         #led(blue=False,green=False,red=True)
-        sleep(0.5)
+        time.sleep(0.5)
         #led(blue=False,green=False,red=False)
 
     while True:
@@ -186,7 +186,7 @@ if __name__ == "__main__":
                 ftp = connect()
                 if len(remote_files) == 0:
                     ftp.mkd(foldname)
-                raspftp.update_index(ftp, param.get('path_www'))
+                update_index(ftp, param.get('path_www'))
                 for im in sorted(diff):
                     ftp.storbinary('STOR '+os.path.join(foldname,im), open(os.path.join(param.get('path_drive'), foldname, im), 'rb'))
                 remote_files = check_content(ftp, foldname)
@@ -197,12 +197,12 @@ if __name__ == "__main__":
                 #blink red led
                 set_FTPstatus('Error')
                 #led(blue=False,green=False,red=True)
-                sleep(0.5)
+                time.sleep(0.5)
                 #led(blue=False,green=False,red=False)
         else:
             set_FTPstatus('Wait')
 
         try:
-            tempime.sleep(min_refresh_rate - ((time.time() - tnow)))
+            time.sleep(min_refresh_rate - ((time.time() - tnow)))
         except:
             pass

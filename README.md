@@ -2,7 +2,8 @@
 
 This concisely describe my build of a photo booth with a Raspberry Pi 4. The primary use of this repository is personal notes but could help if you are trying to do the same thing. The features of the photo booth are:
 
-- No screen (The booth has a mirror and not a screen for people to pose)
+- No photo screen (The booth has a mirror and not a screen for people to pose)
+- optional oled info screen with relevant status messages
 - the shot is indicated by a led strip blinking
 - a fan is added for heat removal
 - the website is rather simple at the moment, but still has a lazyload feature (with lazysizes)
@@ -66,9 +67,19 @@ Add the following line to */etc/rc.local* just before *exit 0* for launching ras
 
 > sudo -u USERNAME python /home/USERNAME/Raspmaton/raspmaton.py &
 
-## ftp credentials
+## ftp Configuration
+
+### Credentials
 
 The ftp credentials need to be stored the 'parameters.txt' file in the following format (see rename_parameters for the format)
+
+### script
+
+Since January 2024, the upload to a FTP server is done in parallel to the script activating the camera, so there is no need to wait for the image to be upladed for the next picture to be taken
+
+Add the following line to */etc/rc.local* just before *exit 0* for launching raspftp.py at boot:
+
+> sudo -u USERNAME python /home/USERNAME/Raspmaton/raspftp.py &
 
 ## Configuration webpage
 
@@ -114,7 +125,6 @@ To see registered networks or manually add networks:
 `sudo nano /etc/wpa_supplicant/wpa_supplicant.conf`
 
 Alternatively, put a `wpa_supplicant.conf` file in the boot partition of the SD card with the wifis SSID and password
-
 
 # Hardware
 
