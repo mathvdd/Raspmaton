@@ -80,7 +80,7 @@ if os.path.isfile(os.path.join(param['path_drive'], 'this_is_the_drive')):
         led(blue=False,green=False,red=False)
         i +=1
 else:
-    set_status('USB manquant!')
+    set_status('USB perdu!')
     while True:
         sleep(0.2)
         led(blue=False,green=False,red=True)
@@ -89,7 +89,7 @@ else:
 
 ## try to read config changes on remote website at startup
 
-set_status('Tentative internet')
+set_status('?Internet?')
 i=0
 while i<4:# try connections
     i +=1
@@ -256,7 +256,7 @@ while True:
     set_status('Ready!')
     led(blue=True,green=False,red=False)
     GPIO.wait_for_edge(pin_button, GPIO.FALLING) #wait for the button to be pushed
-    set_status('Photo en cours')
+    set_status('Prise photo')
     led(blue=False,green=False,red=False)
     camera.start_preview() # open the camera in preview mode (need to be open for at least 2sec before taking the picture for luminosity adjustment)
     pi_pwm.start(0)     # start PWM

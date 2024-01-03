@@ -49,23 +49,47 @@ while True:
 		with open(os.path.join(os.path.expanduser('~'), 'Raspmaton', 'status'), 'r') as file:
 			status = file.read()
 	except:
-		status = 'error reading status'
+		status = 'error status'
+
+	try:
+		with open(os.path.join(os.path.expanduser('~'), 'Raspmaton', 'FTPstatus'), 'r') as file:
+			FTPstatus = file.read()
+	except:
+		FTPstatus = 'error FTP status'
+
+	try:
+		with open(os.path.join(os.path.expanduser('~'), 'www', 'fold_name.conf'), 'r') as file:
+			foldname = file.read()
+	except:
+		foldname = 'error'
+
+
+
 
 	with open(os.path.join(os.path.expanduser('~'), 'www', 'fold_name.conf'), 'r') as file:
 		im_folder = file.read()
 	im_path = os.path.join(path_drive, im_folder)
 	nim = len(os.listdir(im_path))
 
-	draw.text((0,0), status, font=font, fill=255)
-	#draw.text((0,50), str(round(tnow-tstart,2)), font=font, fill=255)
-	draw.text((0,16), f"Wifi:", font=font, fill=255)
-	draw.text((24,16), f"{str(int(sig/0.7))}%", font=font, fill=255)
-	draw.text((54,16), f"{SSID}", font=font, fill=255)
-	draw.text((0,26), f"IP: {IP}",  font=font, fill=255)
-	draw.text((0,42), f"CPU: {CPU}", font=font, fill=255)
-	draw.text((64,42), f"Mem: {str(Mem)}%", font=font, fill=255)
-	draw.text((0,54), f"T: {temp}°C", font=font, fill=255)
-	draw.text((64,54), f"#im: {nim}", font=font, fill=255)
+	draw.text((0,0), f'STA: {status}', font=font, fill=255)
+	draw.text((90,0), f"| #{nim}", font=font, fill=255)
+	draw.text((0,12), f'FTP: {FTPstatus}', font=font, fill=255)
+	draw.text((90,12), f'| {foldname}', font=font, fill=255)
+	draw.text((0,15), f"_________________________", font=font, fill=255)
+	draw.text((0,27), f"Wifi:", font=font, fill=255)
+	draw.text((24,27), f"{str(int(sig/0.7))}%", font=font, fill=255)
+	if (tnow % 10) > 5:
+		draw.text((54,27), f"{SSID}", font=font, fill=255)
+	else:
+		draw.text((54,27), f"{IP}", font=font, fill=255)
+	#draw.text((0,40), f"IP: {IP}",  font=font, fill=255)
+	draw.text((0,30), f"_________________________", font=font, fill=255)
+	draw.text((0,42), f"   Temp", font=font, fill=255)
+	draw.text((43,42), f"|   CPU", font=font, fill=255)
+	draw.text((86,42), f"|   Mem", font=font, fill=255)
+	draw.text((0,54), f"   {temp}°C", font=font, fill=255)
+	draw.text((43,54), f"|   {CPU}", font=font, fill=255)
+	draw.text((86,54), f"|   {str(Mem)}%", font=font, fill=255)
 
 	# Display to screen
 	disp.image(image)  # set display buffer with image buffer
