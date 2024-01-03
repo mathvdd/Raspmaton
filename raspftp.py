@@ -203,6 +203,6 @@ if __name__ == "__main__":
             set_FTPstatus('Wait')
 
         try:
-     	     tempime.sleep(min_refresh_rate - ((time.time() - tnow)))
-     	except:
-     		pass
+            tempime.sleep(min_refresh_rate - ((time.time() - tnow)))
+        except:
+            pass
