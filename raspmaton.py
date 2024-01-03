@@ -13,10 +13,6 @@ from time import sleep
 import urllib.request
 
 ## some parameters
-path_www = os.path.join(os.path.expanduser('~'), 'www') #path to the www directory
-path_status = os.path.join(os.path.expanduser('~'), 'Raspmaton', 'status')
-drive_name = 'USBdrive'
-path_drive = os.path.join(os.path.expanduser('~'), drive_name)
 pin_button = 10 # pin to receive the button input
 pin_led = 12 # pin to controle the LEDs
 pin_ledb = 16
@@ -38,8 +34,14 @@ GPIO.setup(pin_button, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Set pin pin_button a
 
 camera = PiCamera()
 
+def import_params():
+    with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
+        param = {i.rstrip().split(':',1)[0]:os.path.expanduser(i.rstrip().split(':',1)[1]) for i in f if i.startswith('#') == False}
+    return params
+param = import_params()
+
 def set_status(status):
-    with open(path_status, 'w') as file:
+    with open(param['path_status'], 'w') as file:
         file.write(status)
 
 # led control
@@ -68,7 +70,7 @@ while i < 3:
     i +=1
 
 ## check if the USB drive is connected
-if os.path.isfile(os.path.join(path_drive, 'this_is_the_drive')):
+if os.path.isfile(os.path.join(param['path_drive'], 'this_is_the_drive')):
     set_status('USB connecte')
     i = 0
     while i < 2:
@@ -88,8 +90,6 @@ else:
 ## try to read config changes on remote website at startup
 
 set_status('Tentative internet')
-with open(os.path.expanduser('~/Raspmaton/parameters.txt')) as f:
-    param = dict(i.rstrip().split(':',1) for i in f if i.startswith('#') == False)
 i=0
 while i<4:# try connections
     i +=1
@@ -115,11 +115,11 @@ while i<4:# try connections
         foldparam = None
 
 ## initiating local file system
-gitparam_path = os.path.join(path_www, 'git_update.conf')
-foldparam_path = os.path.join(path_www, 'fold_name.conf')
+gitparam_path = os.path.join(param['path_www'], 'git_update.conf')
+foldparam_path = os.path.join(param['path_www'], 'fold_name.conf')
 
-if not os.path.isdir(path_www): #creating the www folder if not exists
-    os.mkdir(path_www)
+if not os.path.isdir(param['path_www']): #creating the www folder if not exists
+    os.mkdir(param['path_www'])
 
 # save params as file so can be kept between boots
 if gitparam != None: #replace the param file or create a new one if not exists, load the file in the last case
@@ -160,7 +160,7 @@ if gitparam == "On":
         with open(gitparam_path, 'w') as f:
             f.write('Off')
         ftp = raspftp.connect(5)
-        raspftp.update_git_update(ftp, os.path.expanduser('~/www'))
+        raspftp.update_git_update(ftp, param['path_www'])
         raspftp.disconnect(ftp)
 
         i = 0
@@ -185,7 +185,7 @@ if gitparam == "On":
             i +=1
 
 #creates the picture directory for the event
-path_pictures = os.path.join(path_drive, foldparam)
+path_pictures = os.path.join(param['path_drive'], foldparam)
 if not os.path.isdir(path_pictures):
     os.mkdir(path_pictures) #creating the www folder
 
@@ -202,85 +202,55 @@ for filename in os.listdir(path_pictures):
 
 ## main loop
 t0 = time.time()
-head = '''
-<!DOCTYPE html>
-    <html>
-      <head>
-        <title>
-          Raspmaton gallery
-        </title>
-        <style>
-          * {
-              margin: 0;
-              padding: 0;
-              margin-bottom: 1vh;
-          }
-          .imgbox {
-              display: grid;
-              height: 100%;
-          }
-          .center-fit {
-              max-width: 100%;
-              margin: auto;
-          }
-        </style>
-        <script src="lazysizes.min.js" async=""></script>
-      </head>
-      <body>
-'''
-foot = '''
-            </body>
-    </html>
-'''
 
 while True:
     # generates the website
-    set_status('Generate website')
-    content =''
-    not_lazy = 0 #this is ised for not lazy loadeing the first images in the viewport
-    for filename in sorted(os.listdir(path_pictures), reverse=True):
-        if filename.endswith('.jpg'): #just some checks
-            path_file = os.path.join(path_pictures, filename)
-            if not_lazy <3: #load the first 3 images
-                try:
-                    file_count = int(filename[-8:-4])
-                    content += '''<div class="imgbox">
-                        <img class="center-fit" src='{}'>
-                    </div>'''.format('.' + path_file.split(path_drive)[1])
-                    #</div>''.format(drive_name + path_file.split(path_drive)[1])
-                    not_lazy +=1
-                except:
-                    pass
-            else:
-                try: # lazy load the other images
-                    file_count = int(filename[-8:-4])
-                    content += '''<div class="imgbox">
-                        <img class="center-fit lazyload" data-src='{}'>
-                    </div>'''.format('.' + path_file.split(path_drive)[1])
-                    #</div>''.format(drive_name + path_file.split(path_drive)[1])
-                except:
-                    pass
+    # set_status('Generate website')
+    # content =''
+    # not_lazy = 0 #this is ised for not lazy loadeing the first images in the viewport
+    # for filename in sorted(os.listdir(path_pictures), reverse=True):
+    #     if filename.endswith('.jpg'): #just some checks
+    #         path_file = os.path.join(path_pictures, filename)
+    #         if not_lazy <3: #load the first 3 images
+    #             try:
+    #                 file_count = int(filename[-8:-4])
+    #                 content += '''<div class="imgbox">
+    #                     <img class="center-fit" src='{}'>
+    #                 </div>'''.format('.' + path_file.split(path_drive)[1])
+    #                 #</div>''.format(drive_name + path_file.split(path_drive)[1])
+    #                 not_lazy +=1
+    #             except:
+    #                 pass
+    #         else:
+    #             try: # lazy load the other images
+    #                 file_count = int(filename[-8:-4])
+    #                 content += '''<div class="imgbox">
+    #                     <img class="center-fit lazyload" data-src='{}'>
+    #                 </div>'''.format('.' + path_file.split(path_drive)[1])
+    #                 #</div>''.format(drive_name + path_file.split(path_drive)[1])
+    #             except:
+    #                 pass
 
-    with open(os.path.join(path_www, 'raspmaton.html'), 'w') as f: # write the html page
-        f.write(head+content+foot)
+    # with open(os.path.join(param['path_www'], 'raspmaton.html'), 'w') as f: # write the html page
+    #     f.write(head+content+foot)
 
-    # try to connect to remote dir
-    try:
-        set_status('FTP upload')
-        ftp = raspftp.connect()
-        raspftp.upload_content(ftp, foldparam)
-        raspftp.update_index(ftp, os.path.expanduser('~/www'))
-        raspftp.disconnect(ftp)
-        #blink green led
-        led(blue=False,green=True,red=False)
-        sleep(0.5)
-        led(blue=False,green=False,red=False)
-    except:
-        #blink red led
-        set_status('FTP error')
-        led(blue=False,green=False,red=True)
-        sleep(0.5)
-        led(blue=False,green=False,red=False)
+    # # try to connect to remote dir
+    # try:
+    #     set_status('FTP upload')
+    #     ftp = raspftp.connect()
+    #     raspftp.upload_content(ftp, foldparam)
+    #     raspftp.update_index(ftp, param['path_www'])
+    #     raspftp.disconnect(ftp)
+    #     #blink green led
+    #     led(blue=False,green=True,red=False)
+    #     sleep(0.5)
+    #     led(blue=False,green=False,red=False)
+    # except:
+    #     #blink red led
+    #     set_status('FTP error')
+    #     led(blue=False,green=False,red=True)
+    #     sleep(0.5)
+    #     led(blue=False,green=False,red=False)
 
     # takes the picture event
     set_status('Ready!')

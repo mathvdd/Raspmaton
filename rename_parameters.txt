@@ -1,5 +1,12 @@
+#ftp credentials
 domain:FTP_DOMAIN
 username:FTP_USERNAME
 password:FTP_PASSWORD
+#destination folder on the ftp server
 ftp_www:REMOTE_DIR
 url_www:URL_OF_REMOTE_DIR
+#paths on the RPi
+path_www:~/www
+path_status:~/Raspmaton/status
+path_FTP_status:~/Raspmaton/FTPstatus
+path_drive:~/USBdrive
